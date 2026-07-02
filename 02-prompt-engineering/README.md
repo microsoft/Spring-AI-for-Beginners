@@ -35,7 +35,7 @@ The following diagram provides an overview of the key topics and skills you'll d
 
 In the previous module, you explored basic Spring AI interactions with Microsoft Foundry and saw how memory enables conversational AI. Now we'll focus on how you ask questions — the prompts themselves — using Microsoft Foundry's GPT-5.2. The way you structure your prompts dramatically affects the quality of responses you get. We start with a review of the fundamental prompting techniques, then move into eight advanced patterns that take full advantage of GPT-5.2's capabilities.
 
-We'll use GPT-5.2 because it introduces reasoning control - you can tell the model how much thinking to do before answering. This makes different prompting strategies more apparent and helps you understand when to use each approach. We'll also benefit from Azure's fewer rate limits for GPT-5.2 compared to GitHub Models.
+We'll use GPT-5.2 because it introduces reasoning control - you can tell the model how much thinking to do before answering. This makes different prompting strategies more apparent and helps you understand when to use each approach.
 
 ## Prerequisites
 
@@ -62,7 +62,7 @@ The five core techniques shown below form the foundation of effective prompt eng
 
 <img src="images/five-patterns-overview.png" alt="Five Prompt Engineering Patterns Overview" width="800"/>
 
-Before diving into the advanced patterns in this module, let's review five foundational prompting techniques. These are the building blocks that every prompt engineer should know. If you've already worked through the [Quick Start module](../00-quick-start/README.md#what-each-example-shows), you've seen these in action — here's the conceptual framework behind them.
+Before diving into the advanced patterns in this module, let's review five foundational prompting techniques. These are the building blocks that every prompt engineer should know.
 
 ### Zero-Shot Prompting
 

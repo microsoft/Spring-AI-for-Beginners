@@ -18,19 +18,18 @@
 
 ## What You'll Learn
 
-In the quick start, you used GitHub Models to send prompts, call tools, ask questions about documents, and test guardrails. Those demos showed what's possible — now we switch to Microsoft Foundry and start building production-style applications. This module focuses on conversational AI that remembers context and maintains state.
+This first module introduces Microsoft Foundry and starts building production-style applications. It focuses on conversational AI that remembers context and maintains state.
 
 We'll use Microsoft Foundry's `gpt-4o-mini` throughout this guide. It's fast and cheap, which keeps the focus on the patterns rather than waiting for responses. When you add memory, you'll clearly see the difference between stateless and stateful behavior. (Module 02 will switch to GPT-5.2 specifically to explore reasoning controls.)
 
 You'll build one application that demonstrates both patterns:
 
-**Stateless Chat** - Each request is independent. The model has no memory of previous messages. This is the pattern you used in the quick start.
+**Stateless Chat** - Each request is independent. The model has no memory of previous messages.
 
 **Stateful Conversation** - Each request includes conversation history managed by Spring AI's `MessageWindowChatMemory`. The model maintains context across multiple turns with automatic sliding-window trimming. This is what production applications require.
 
 ## Prerequisites
 
-- Completed [Module 00 - Quick Start](../00-quick-start/README.md)
 - Azure subscription with Microsoft Foundry access
 - Java 25, Maven 3.9+ (Spring AI itself supports Java 17+, but this repo targets Java 25 via Spring Boot 4)
 - Azure CLI (https://learn.microsoft.com/en-us/cli/azure/install-azure-cli)
@@ -318,7 +317,7 @@ Both panels use the same `gpt-4o-mini` model. The only difference is memory. Thi
 
 ## Summary
 
-In this module you moved from GitHub Models to Microsoft Foundry and built your first production-style Spring AI application. You saw why language models are inherently stateless, and how Spring AI's `MessageWindowChatMemory` adds stateful, multi-turn conversations with automatic sliding-window trimming. The side-by-side stateless vs. stateful demo made it clear why memory is essential for real applications. Next, you'll focus on the prompts themselves and how their structure shapes response quality.
+In this module you built your first production-style Spring AI application on Microsoft Foundry. You saw why language models are inherently stateless, and how Spring AI's `MessageWindowChatMemory` adds stateful, multi-turn conversations with automatic sliding-window trimming. The side-by-side stateless vs. stateful demo made it clear why memory is essential for real applications. Next, you'll focus on the prompts themselves and how their structure shapes response quality.
 
 ## Next Steps
 
@@ -326,6 +325,6 @@ In this module you moved from GitHub Models to Microsoft Foundry and built your 
 
 ---
 
-**Navigation:** [← Previous: Module 00 - Quick Start](../00-quick-start/README.md) | [Back to Main](../README.md) | [Next: Module 02 - Prompt Engineering →](../02-prompt-engineering/README.md)
+**Navigation:** [Back to Main](../README.md) | [Next: Module 02 - Prompt Engineering →](../02-prompt-engineering/README.md)
 
 

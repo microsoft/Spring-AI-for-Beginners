@@ -45,8 +45,6 @@ try {
     $AzureOpenAiDeployment = if ($AzdEnvVars['AZURE_OPENAI_DEPLOYMENT']) { $AzdEnvVars['AZURE_OPENAI_DEPLOYMENT'] } elseif ($ExistingVars['AZURE_OPENAI_DEPLOYMENT']) { $ExistingVars['AZURE_OPENAI_DEPLOYMENT'] } else { 'gpt-5.2' }
     $AzureOpenAiFastDeployment = if ($AzdEnvVars['AZURE_OPENAI_FAST_DEPLOYMENT']) { $AzdEnvVars['AZURE_OPENAI_FAST_DEPLOYMENT'] } elseif ($ExistingVars['AZURE_OPENAI_FAST_DEPLOYMENT']) { $ExistingVars['AZURE_OPENAI_FAST_DEPLOYMENT'] } else { 'gpt-4o-mini' }
     $AzureOpenAiEmbeddingDeployment = if ($AzdEnvVars['AZURE_OPENAI_EMBEDDING_DEPLOYMENT']) { $AzdEnvVars['AZURE_OPENAI_EMBEDDING_DEPLOYMENT'] } elseif ($ExistingVars['AZURE_OPENAI_EMBEDDING_DEPLOYMENT']) { $ExistingVars['AZURE_OPENAI_EMBEDDING_DEPLOYMENT'] } else { 'text-embedding-3-small' }
-    # Preserve GITHUB_TOKEN (used by Module 00 Quick Start) from azd or existing .env
-    $GitHubToken = if ($AzdEnvVars['GITHUB_TOKEN']) { $AzdEnvVars['GITHUB_TOKEN'] } else { $ExistingVars['GITHUB_TOKEN'] }
 
     # Validate required variables
     if (-not $AzureOpenAiEndpoint) {
@@ -72,11 +70,6 @@ AZURE_OPENAI_DEPLOYMENT=$AzureOpenAiDeployment
 AZURE_OPENAI_FAST_DEPLOYMENT=$AzureOpenAiFastDeployment
 AZURE_OPENAI_EMBEDDING_DEPLOYMENT=$AzureOpenAiEmbeddingDeployment
 "@ | Set-Content -Path $EnvFile
-
-    # Preserve GITHUB_TOKEN (Module 00 Quick Start) only if it has a value
-    if ($GitHubToken) {
-        Add-Content -Path $EnvFile -Value "GITHUB_TOKEN=$GitHubToken"
-    }
 
     # Create .env files in module directories
     $Modules = @('01-introduction', '02-prompt-engineering', '03-rag', '04-tools', '05-mcp/mcp-server', '05-mcp/mcp-client', '06-agents')

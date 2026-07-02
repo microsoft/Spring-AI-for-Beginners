@@ -4,7 +4,6 @@ A reference of the key terms, Spring AI abstractions, and AI/ML concepts used th
 
 ## Table of Contents
 
-- [Module 00: Quick Start](#module-00-quick-start)
 - [Module 01: Introduction](#module-01-introduction)
 - [Module 02: Prompt Engineering](#module-02-prompt-engineering)
 - [Module 03: RAG (Retrieval-Augmented Generation)](#module-03-rag-retrieval-augmented-generation)
@@ -14,34 +13,6 @@ A reference of the key terms, Spring AI abstractions, and AI/ML concepts used th
 - [Cross-Cutting Terms](#cross-cutting-terms)
 
 ---
-
-## Module 00: Quick Start
-
-- **Spring AI** — A Java framework that provides a consistent API across AI providers (OpenAI, Microsoft Foundry, GitHub Models, etc.) so you can swap providers without rewriting application code.
-- **GitHub Models** — GitHub's hosted catalog of language models (e.g., `gpt-4.1-nano`) accessed via a Personal Access Token; used in this module so you can try Spring AI without an Azure subscription.
-- **ChatModel** — Spring AI's core abstraction for a chat-capable language model. You send it a `Prompt` and receive a `ChatResponse`.
-- **OpenAiChatModel** — Spring AI's concrete `ChatModel` implementation built on the OpenAI Java SDK; works with both GitHub Models and Microsoft Foundry by configuring the base URL and API key.
-- **OpenAiChatOptions** — Builder-style configuration for `OpenAiChatModel` (model name, base URL, API key, tool callbacks, etc.).
-- **`spring-ai-openai`** — The plain Spring AI OpenAI SDK integration used by the quick-start demos when manually building `OpenAiChatModel` in a `main()` method.
-- **`spring-ai-client-chat`** — The dependency that provides Spring AI's fluent `ChatClient` API and chat-memory advisors.
-- **ChatClient** — Spring AI's recommended high-level, fluent API on top of `ChatModel`. It supports prompt calls, system messages, advisors, memory, structured output, tools, and streaming.
-- **Prompt** — The structured request sent to a `ChatModel`, made up of one or more `Message` objects.
-- **ChatResponse** — The structured result returned by a `ChatModel`, containing the generated text, token usage, and metadata.
-- **PromptTemplate** — A reusable prompt with `{variable}` placeholders that Spring AI fills in at call time so you don't rebuild prompts by hand.
-- **SystemMessage / UserMessage / AssistantMessage** — Spring AI message types that represent the roles in a conversation: instructions to the model, the user's input, and the model's reply.
-- **ToolCallback** — Spring AI's executable representation of a tool definition. A callback can wrap a Java function, an `@Tool` method, or a remote MCP tool.
-- **FunctionToolCallback** — A wrapper that registers a Java function (often expressed via a record input) as a tool the model can call automatically when it decides one is needed.
-- **ChatMemory** — Spring AI abstraction for storing conversation history so the model can remember earlier turns.
-- **MessageWindowChatMemory** — A `ChatMemory` implementation that keeps the most recent N messages per conversation ID, dropping older ones as the window fills.
-- **MessageChatMemoryAdvisor** — A `ChatClient` advisor that automatically loads prior messages from `ChatMemory` before a call and stores the new user/assistant exchange afterward.
-- **Conversation ID** — A string key used by `ChatMemory` to keep different users' or sessions' histories separate.
-- **Context-stuffing** — The lightweight document Q&A approach used in the quick start: load a document and place it into the system message, instead of using a vector store.
-- **Default System Message** — A system instruction configured once on a `ChatClient` (for example with `defaultSystem(...)`) so every prompt call starts with the same grounding instructions.
-- **Guardrails** — Application-level checks (such as keyword filters) that run before sending input to the LLM to block disallowed content.
-- **Provider Safety Filters** — Built-in moderation in the model provider (e.g., GitHub Models) that can hard-block or soft-refuse unsafe content even after your guardrails pass.
-- **Hard Block** — A provider-side safety decision that rejects a request outright, often as an HTTP error, before a normal model answer is returned.
-- **Soft Refusal** — A provider-side safety response where the model returns a polite refusal in natural language rather than completing the unsafe request.
-- **Personal Access Token (PAT)** — A scoped GitHub token used by the quick start to authenticate against GitHub Models with Models read-only permission.
 
 ## Module 01: Introduction
 
@@ -181,7 +152,7 @@ A reference of the key terms, Spring AI abstractions, and AI/ML concepts used th
 These terms appear in multiple modules and are worth knowing throughout the course.
 
 - **LLM (Large Language Model)** — A neural network trained on large amounts of text that can generate and reason about natural language.
-- **Provider** — The service that hosts the LLM (GitHub Models, Microsoft Foundry, etc.); Spring AI lets you switch providers without changing application code.
+- **Provider** — The service that hosts the LLM (Microsoft Foundry, OpenAI, etc.); Spring AI lets you switch providers without changing application code.
 - **gpt-5.2** — A Microsoft Foundry reasoning model with adjustable thinking effort. Used by Module 02 only, to demonstrate prompt engineering with reasoning controls.
 - **gpt-4o-mini** — A fast, low-latency non-reasoning model. Used by Modules 01, 03, 04, 05, and 06 to keep demos responsive while focusing on Spring AI patterns rather than model latency.
 - **text-embedding-3-small** — A Microsoft Foundry embedding model that converts text into 1,536-dimensional vectors. Used by Module 03 only, to power the RAG pipeline's vector store and semantic search.
@@ -196,7 +167,6 @@ These terms appear in multiple modules and are worth knowing throughout the cour
 - **`microsoft-deployment-name`** — The `spring.ai.openai` property that tells the OpenAI SDK to route requests to a named Azure deployment (instead of the OpenAI public model name).
 - **TPM (Tokens per Minute)** — An Azure model-deployment quota/capacity unit that limits how many tokens your deployment can process per minute.
 - **Environment variables** — The shared `.env` file at the repo root provides credentials to every module:
-  - `GITHUB_TOKEN` — GitHub Models PAT, used by Module 00 only.
   - `AZURE_OPENAI_ENDPOINT` — Microsoft Foundry resource URL.
   - `AZURE_OPENAI_API_KEY` — Foundry API key.
   - `AZURE_OPENAI_DEPLOYMENT` — reasoning chat deployment name (`gpt-5.2`), used by Module 02.

@@ -128,11 +128,11 @@ Spring AI's `ChatClient` accepts tool instances via `.tools()` and executes tool
 
 *The end-to-end flow — the user asks a question, the model selects a tool, Spring AI executes it, and the model weaves the result into a natural response.*
 
-If you ran the [ToolIntegrationDemo](../00-quick-start/src/main/java/com/example/springai/quickstart/ToolIntegrationDemo.java) in Module 00, you already saw this pattern in action — the `Calculator` tools were called the same way. The sequence diagram below shows exactly what happened under the hood during that demo:
+The sequence diagram below shows exactly what happens under the hood during a tool call:
 
 <img src="images/tool-calling-sequence.png" alt="Tool Calling Sequence Diagram" width="800"/>
 
-*The tool-calling loop from the Quick Start demo — `main()` asks ChatClient, which sends the message and tool schemas to the LLM. The LLM requests `add(42, 58)`, ChatClient executes it on the Calculator, and the LLM uses the result to compose the final answer.*
+*The tool-calling loop — the app asks ChatClient, which sends the message and tool schemas to the LLM. The LLM requests a tool call, ChatClient executes it, and the LLM uses the result to compose the final answer.*
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Open [`AgentService.java`](src/main/java/com/example/springai/tools/service/AgentService.java) and ask:
 > - "How does the ReAct pattern work and why is it effective for AI agents?"

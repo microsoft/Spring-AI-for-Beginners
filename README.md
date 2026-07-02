@@ -6,13 +6,12 @@ An end-to-end curriculum that takes a Java developer from "hello, LLM" to produc
 
 ## Table of Contents
 
-1. [Quick Start](00-quick-start/README.md) - Get started with Spring AI
-2. [Introduction](01-introduction/README.md) - Learn the fundamentals of Spring AI
-3. [Prompt Engineering](02-prompt-engineering/README.md) - Master effective prompt design
-4. [RAG (Retrieval-Augmented Generation)](03-rag/README.md) - Build intelligent knowledge-based systems
-5. [Tools](04-tools/README.md) - Integrate external tools
-6. [MCP (Model Context Protocol)](05-mcp/README.md) - Work with Model Context Protocol (MCP)
-7. [Agents](06-agents/README.md) - Build AI agents
+1. [Introduction](01-introduction/README.md) - Learn the fundamentals of Spring AI
+2. [Prompt Engineering](02-prompt-engineering/README.md) - Master effective prompt design
+3. [RAG (Retrieval-Augmented Generation)](03-rag/README.md) - Build intelligent knowledge-based systems
+4. [Tools](04-tools/README.md) - Integrate external tools
+5. [MCP (Model Context Protocol)](05-mcp/README.md) - Work with Model Context Protocol (MCP)
+6. [Agents](06-agents/README.md) - Build AI agents
 
 📖 **Reference:** [Glossary](glossary.md) - Key terms and concepts used across all modules
 
@@ -27,9 +26,9 @@ An end-to-end curriculum that takes a Java developer from "hello, LLM" to produc
 3. Use the defaults – this will select the Development container created for this course
 4. Click **Create codespace**
 5. Wait 5-10 minutes for the environment to be ready
-6. Jump straight to [Quick Start](./00-quick-start/README.md) to get started!
+6. Jump straight to the [Introduction](./01-introduction/README.md) module to get started!
 
-> **Note:** This training uses both GitHub Models and Microsoft Foundry. The [Quick Start](00-quick-start/README.md) module uses GitHub Models (no Azure subscription required), while modules 1-6 use Microsoft Foundry. Get started with a [FREE Azure account](https://aka.ms/azure-free-account) if you don't have one.
+> **Note:** This training uses Microsoft Foundry. Get started with a [FREE Azure account](https://aka.ms/azure-free-account) if you don't have one.
 
 > **Models used:** `azd up` provisions three model deployments — two chat models and one embedding model. Module 02 uses **gpt-5.2** to demonstrate reasoning controls; modules 01, 03, 04, 05, and 06 use **gpt-4o-mini** so demos stay fast and the focus stays on the Spring AI patterns; module 03 also uses **text-embedding-3-small** for RAG. The three deployments are routed via env vars (`AZURE_OPENAI_DEPLOYMENT` / `AZURE_OPENAI_FAST_DEPLOYMENT` / `AZURE_OPENAI_EMBEDDING_DEPLOYMENT`) — see [01-introduction/infra/README.md](01-introduction/infra/README.md) for details.
 

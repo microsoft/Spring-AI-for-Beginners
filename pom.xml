@@ -10,7 +10,6 @@
   <packaging>pom</packaging>
 
   <modules>
-    <module>00-quick-start</module>
     <module>01-introduction</module>
     <module>02-prompt-engineering</module>
     <module>03-rag</module>

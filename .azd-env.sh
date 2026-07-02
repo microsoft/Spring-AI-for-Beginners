@@ -34,7 +34,6 @@ AZD_API_KEY=$(azd env get-value AZURE_OPENAI_KEY 2>/dev/null | head -n 1 || true
 AZD_DEPLOYMENT=$(azd env get-value AZURE_OPENAI_DEPLOYMENT 2>/dev/null | head -n 1 || true)
 AZD_FAST_DEPLOYMENT=$(azd env get-value AZURE_OPENAI_FAST_DEPLOYMENT 2>/dev/null | head -n 1 || true)
 AZD_EMBEDDING=$(azd env get-value AZURE_OPENAI_EMBEDDING_DEPLOYMENT 2>/dev/null | head -n 1 || true)
-AZD_GITHUB_TOKEN=$(azd env get-value GITHUB_TOKEN 2>/dev/null | head -n 1 || true)
 
 # Return to script directory
 cd "$SCRIPT_DIR"
@@ -47,7 +46,6 @@ AZD_API_KEY="${AZD_API_KEY//$'\r'/}"
 AZD_DEPLOYMENT="${AZD_DEPLOYMENT//$'\r'/}"
 AZD_FAST_DEPLOYMENT="${AZD_FAST_DEPLOYMENT//$'\r'/}"
 AZD_EMBEDDING="${AZD_EMBEDDING//$'\r'/}"
-AZD_GITHUB_TOKEN="${AZD_GITHUB_TOKEN//$'\r'/}"
 
 # Use azd values if available, otherwise use existing or defaults
 AZURE_OPENAI_ENDPOINT="${AZD_ENDPOINT:-${AZURE_OPENAI_ENDPOINT}}"
@@ -55,8 +53,6 @@ AZURE_OPENAI_API_KEY="${AZD_API_KEY:-${AZURE_OPENAI_API_KEY}}"
 AZURE_OPENAI_DEPLOYMENT="${AZD_DEPLOYMENT:-${AZURE_OPENAI_DEPLOYMENT:-gpt-5.2}}"
 AZURE_OPENAI_FAST_DEPLOYMENT="${AZD_FAST_DEPLOYMENT:-${AZURE_OPENAI_FAST_DEPLOYMENT:-gpt-4o-mini}}"
 AZURE_OPENAI_EMBEDDING_DEPLOYMENT="${AZD_EMBEDDING:-${AZURE_OPENAI_EMBEDDING_DEPLOYMENT:-text-embedding-3-small}}"
-# Preserve GITHUB_TOKEN (used by Module 00 Quick Start) from azd or existing .env
-GITHUB_TOKEN="${AZD_GITHUB_TOKEN:-${GITHUB_TOKEN}}"
 
 # Validate required variables
 if [ -z "$AZURE_OPENAI_ENDPOINT" ]; then
@@ -81,11 +77,6 @@ AZURE_OPENAI_DEPLOYMENT=$AZURE_OPENAI_DEPLOYMENT
 AZURE_OPENAI_FAST_DEPLOYMENT=$AZURE_OPENAI_FAST_DEPLOYMENT
 AZURE_OPENAI_EMBEDDING_DEPLOYMENT=$AZURE_OPENAI_EMBEDDING_DEPLOYMENT
 EOF
-
-# Preserve GITHUB_TOKEN (Module 00 Quick Start) only if it has a value
-if [ -n "$GITHUB_TOKEN" ]; then
-    echo "GITHUB_TOKEN=$GITHUB_TOKEN" >> "$ENV_FILE"
-fi
 
 # Create .env files in module directories
 for module_dir in 01-introduction 02-prompt-engineering 03-rag 04-tools 05-mcp/mcp-server 05-mcp/mcp-client 06-agents; do

@@ -2,46 +2,6 @@
     "configurations": [
         {
             "type": "java",
-            "name": "ToolIntegrationDemo",
-            "request": "launch",
-            "mainClass": "com.example.springai.quickstart.ToolIntegrationDemo",
-            "projectName": "spring-ai-quickstart",
-            "envFile": "${workspaceFolder}/.env"
-        },
-        {
-            "type": "java",
-            "name": "SimpleReaderDemo",
-            "request": "launch",
-            "mainClass": "com.example.springai.quickstart.SimpleReaderDemo",
-            "projectName": "spring-ai-quickstart",
-            "envFile": "${workspaceFolder}/.env"
-        },
-        {
-            "type": "java",
-            "name": "BasicChatDemo",
-            "request": "launch",
-            "mainClass": "com.example.springai.quickstart.BasicChatDemo",
-            "projectName": "spring-ai-quickstart",
-            "envFile": "${workspaceFolder}/.env"
-        },
-        {
-            "type": "java",
-            "name": "ResponsibleAIDemo",
-            "request": "launch",
-            "mainClass": "com.example.springai.quickstart.ResponsibleAIDemo",
-            "projectName": "spring-ai-quickstart",
-            "envFile": "${workspaceFolder}/.env"
-        },
-        {
-            "type": "java",
-            "name": "PromptEngineeringDemo",
-            "request": "launch",
-            "mainClass": "com.example.springai.quickstart.PromptEngineeringDemo",
-            "projectName": "spring-ai-quickstart",
-            "envFile": "${workspaceFolder}/.env"
-        },
-        {
-            "type": "java",
             "name": "Spring Boot: Introduction",
             "request": "launch",
             "cwd": "${workspaceFolder}/01-introduction",
