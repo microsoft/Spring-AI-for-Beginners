@@ -32,7 +32,7 @@
     <!-- Other dependency versions -->
     <pdfbox.version>2.0.31</pdfbox.version>
     <!-- Spring AI version -->
-    <spring.ai.version>2.0.0</spring.ai.version>
+    <spring.ai.version>2.0.1</spring.ai.version>
     <!-- Maven plugin versions -->
     <maven.surefire.version>3.5.4</maven.surefire.version>
     <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
