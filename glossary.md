@@ -162,7 +162,7 @@ These terms appear in multiple modules and are worth knowing throughout the cour
 - **Dev Container / Codespaces** — The pre-configured development environment for this course (Java 25, Maven 3.9+, Copilot) that you can launch as a GitHub Codespace. Spring AI itself runs on Java 17+, but this repo targets Java 25 because it builds on Spring Boot 4.
 - **Maven** — The Java build tool used to compile and run every example (`mvn compile exec:java -Dexec.mainClass=...`).
 - **Spring AI BOM** — The Maven bill of materials (`spring-ai-bom`) that pins Spring AI dependency versions consistently across all modules.
-- **Spring Milestones Repository** — A Maven repository (`repo.spring.io/milestone`) that hosts pre-release Spring AI versions (milestones and release candidates). This course now uses the Spring AI `2.0.0` GA release from Maven Central, so this repository is no longer required.
+- **Spring Milestones Repository** — A Maven repository (`repo.spring.io/milestone`) that hosts pre-release Spring AI versions (milestones and release candidates). This course now uses the Spring AI `2.0.1` GA release from Maven Central, so this repository is no longer required.
 - **`application.yaml`** — The Spring Boot configuration file used by modules 1–6 to wire up Microsoft Foundry credentials, model names, and other settings.
 - **`microsoft-deployment-name`** — The `spring.ai.openai` property that tells the OpenAI SDK to route requests to a named Azure deployment (instead of the OpenAI public model name).
 - **TPM (Tokens per Minute)** — An Azure model-deployment quota/capacity unit that limits how many tokens your deployment can process per minute.
