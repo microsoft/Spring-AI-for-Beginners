@@ -30,7 +30,7 @@ An end-to-end curriculum that takes a Java developer from "hello, LLM" to produc
 
 > **Note:** This training uses Microsoft Foundry. Get started with a [FREE Azure account](https://aka.ms/azure-free-account) if you don't have one.
 
-> **Models used:** `azd up` provisions three model deployments — two chat models and one embedding model. Module 02 uses **gpt-5.2** to demonstrate reasoning controls; modules 01, 03, 04, 05, and 06 use **gpt-4o-mini** so demos stay fast and the focus stays on the Spring AI patterns; module 03 also uses **text-embedding-3-small** for RAG. The three deployments are routed via env vars (`AZURE_OPENAI_DEPLOYMENT` / `AZURE_OPENAI_FAST_DEPLOYMENT` / `AZURE_OPENAI_EMBEDDING_DEPLOYMENT`) — see [01-introduction/infra/README.md](01-introduction/infra/README.md) for details.
+> **Models used:** `azd up` provisions three model deployments — two chat models and one embedding model. Module 02 uses **gpt-5.2** to demonstrate reasoning controls; modules 01, 03, 04, 05, and 06 use **gpt-5-nano** so demos stay fast and the focus stays on the Spring AI patterns; module 03 also uses **text-embedding-3-small** for RAG. The three deployments are routed via env vars (`AZURE_OPENAI_DEPLOYMENT` / `AZURE_OPENAI_FAST_DEPLOYMENT` / `AZURE_OPENAI_EMBEDDING_DEPLOYMENT`) — see [01-introduction/infra/README.md](01-introduction/infra/README.md) for details.
 
 
 ## Learning with GitHub Copilot
