@@ -31,15 +31,15 @@ param openAiDeployments array = [
     }
   }
   {
-    name: 'gpt-4o-mini'
+    name: 'gpt-5-nano'
     model: {
       format: 'OpenAI'
-      name: 'gpt-4o-mini'
-      version: '2024-07-18'
+      name: 'gpt-5-nano'
+      version: '2025-08-07'
     }
     sku: {
       name: 'GlobalStandard'
-      capacity: 31660
+      capacity: 30000
     }
   }
   {
@@ -93,7 +93,7 @@ output AZURE_RESOURCE_GROUP_NAME string = rg.name
 
 output AZURE_OPENAI_ENDPOINT string = openAi.outputs.endpoint
 output AZURE_OPENAI_DEPLOYMENT string = 'gpt-5.2'
-output AZURE_OPENAI_FAST_DEPLOYMENT string = 'gpt-4o-mini'
+output AZURE_OPENAI_FAST_DEPLOYMENT string = 'gpt-5-nano'
 output AZURE_OPENAI_EMBEDDING_DEPLOYMENT string = 'text-embedding-3-small'
 output AZURE_OPENAI_NAME string = openAi.outputs.name
 output AZURE_OPENAI_KEY string = openAi.outputs.key

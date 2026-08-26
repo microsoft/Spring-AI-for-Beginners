@@ -154,7 +154,7 @@ These terms appear in multiple modules and are worth knowing throughout the cour
 - **LLM (Large Language Model)** — A neural network trained on large amounts of text that can generate and reason about natural language.
 - **Provider** — The service that hosts the LLM (Microsoft Foundry, OpenAI, etc.); Spring AI lets you switch providers without changing application code.
 - **gpt-5.2** — A Microsoft Foundry reasoning model with adjustable thinking effort. Used by Module 02 only, to demonstrate prompt engineering with reasoning controls.
-- **gpt-4o-mini** — A fast, low-latency non-reasoning model. Used by Modules 01, 03, 04, 05, and 06 to keep demos responsive while focusing on Spring AI patterns rather than model latency.
+- **gpt-5-nano** — The smallest, fastest model in the GPT-5 family. Used by Modules 01, 03, 04, 05, and 06 to keep demos responsive while focusing on Spring AI patterns rather than model latency.
 - **text-embedding-3-small** — A Microsoft Foundry embedding model that converts text into 1,536-dimensional vectors. Used by Module 03 only, to power the RAG pipeline's vector store and semantic search.
 - **azd (Azure Developer CLI)** — The command-line tool that provisions the Microsoft Foundry resource and model deployments for modules 1–6 (`azd up`); see [01-introduction/infra/README.md](01-introduction/infra/README.md).
 - **Bicep** — Azure's infrastructure-as-code language used by Module 01 to define the Microsoft Foundry resource and model deployments.
@@ -170,5 +170,5 @@ These terms appear in multiple modules and are worth knowing throughout the cour
   - `AZURE_OPENAI_ENDPOINT` — Microsoft Foundry resource URL.
   - `AZURE_OPENAI_API_KEY` — Foundry API key.
   - `AZURE_OPENAI_DEPLOYMENT` — reasoning chat deployment name (`gpt-5.2`), used by Module 02.
-  - `AZURE_OPENAI_FAST_DEPLOYMENT` — fast chat deployment name (`gpt-4o-mini`), used by Modules 01, 03, 04, 05, 06.
+  - `AZURE_OPENAI_FAST_DEPLOYMENT` — fast chat deployment name (`gpt-5-nano`), used by Modules 01, 03, 04, 05, 06.
   - `AZURE_OPENAI_EMBEDDING_DEPLOYMENT` — embedding deployment name (`text-embedding-3-small`), used by Module 03.
