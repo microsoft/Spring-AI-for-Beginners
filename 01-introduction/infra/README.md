@@ -33,7 +33,7 @@ The infrastructure deploys the following Azure resources:
 ### AI Services
 - **Microsoft Foundry**: Cognitive Services with three model deployments:
   - **gpt-5.2**: Reasoning chat model used by Module 02 (prompt engineering)
-  - **gpt-5-nano**: Fast, low-latency chat model used by all other modules (01, 03, 04, 05, 06)
+  - **gpt-5.6-luna**: Fast, low-latency chat model used by all other modules (01, 03, 04, 05, 06)
   - **text-embedding-3-small**: Embedding model for RAG (Module 03)
 
 ### Local Development
@@ -78,7 +78,7 @@ When prompted:
 - Confirm the environment name (default: `spring-ai-dev`)
 
 This will create:
-- Microsoft Foundry resource with GPT-5.2, gpt-5-nano, and text-embedding-3-small
+- Microsoft Foundry resource with GPT-5.2, gpt-5.6-luna, and text-embedding-3-small
 - Output connection details
 
 ### 2. Get Connection Details
@@ -97,7 +97,7 @@ This displays:
 - `AZURE_OPENAI_ENDPOINT`: Your Microsoft Foundry endpoint URL
 - `AZURE_OPENAI_KEY`: API key returned by `azd`; the post-provision scripts write this to `AZURE_OPENAI_API_KEY` in `.env` for local apps
 - `AZURE_OPENAI_DEPLOYMENT`: Reasoning chat model name (gpt-5.2) — used by Module 02
-- `AZURE_OPENAI_FAST_DEPLOYMENT`: Fast chat model name (gpt-5-nano) — used by all other modules
+- `AZURE_OPENAI_FAST_DEPLOYMENT`: Fast chat model name (gpt-5.6-luna) — used by all other modules
 - `AZURE_OPENAI_EMBEDDING_DEPLOYMENT`: Embedding model name
 
 ### 3. Run Applications Locally
@@ -157,15 +157,15 @@ param openAiDeployments array = [
     }
   }
   {
-    name: 'gpt-5-nano'  // Fast, low-latency model used by all other modules
+    name: 'gpt-5.6-luna'  // Fast, low-latency model used by all other modules
     model: {
       format: 'OpenAI'
-      name: 'gpt-5-nano'
-      version: '2025-08-07'
+      name: 'gpt-5.6-luna'
+      version: '2026-07-09'
     }
     sku: {
       name: 'GlobalStandard'
-      capacity: 30000
+      capacity: 9000
     }
   }
   // Add more deployments...
@@ -279,7 +279,7 @@ The subdomain name generated from your subscription/environment is already in us
    - Choose a unique name for your resource
    - Deploy the following models:
      - **GPT-5.2**
-     - **gpt-5-nano** (used by modules 01, 03, 04, 05, 06 for fast, low-latency chat)
+     - **gpt-5.6-luna** (used by modules 01, 03, 04, 05, 06 for fast, low-latency chat)
      - **text-embedding-3-small** (for RAG modules)
    - **Important:** Note your deployment names - they must match `.env` configuration
    - After deployment, get your endpoint and API key from "Keys and Endpoint"
@@ -290,12 +290,12 @@ The subdomain name generated from your subscription/environment is already in us
      AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
      AZURE_OPENAI_API_KEY=your-api-key-here
      AZURE_OPENAI_DEPLOYMENT=gpt-5.2
-     AZURE_OPENAI_FAST_DEPLOYMENT=gpt-5-nano
+     AZURE_OPENAI_FAST_DEPLOYMENT=gpt-5.6-luna
      AZURE_OPENAI_EMBEDDING_DEPLOYMENT=text-embedding-3-small
      ```
 
 **Model Deployment Naming Guidelines:**
-- Use simple, consistent names: `gpt-5.2`, `gpt-5-nano`, `text-embedding-3-small`
+- Use simple, consistent names: `gpt-5.2`, `gpt-5.6-luna`, `text-embedding-3-small`
 - Deployment names must match exactly what you configure in `.env`
 - Common mistake: Creating model with one name but referencing different name in code
 
@@ -379,7 +379,7 @@ The subdomain name generated from your subscription/environment is already in us
 **Solution**:
 1. Check OpenAI token usage and throttling in Azure Portal metrics
 2. Increase TPM capacity if you're hitting limits
-3. Use lower reasoning effort or `gpt-5-nano` when full reasoning is not needed
+3. Use lower reasoning effort or `gpt-5.6-luna` when full reasoning is not needed
 
 ## Clean Up
 
@@ -428,7 +428,7 @@ infra/
 
 ## Summary
 
-This infrastructure deploys a single Microsoft Foundry resource — with `gpt-5.2`, `gpt-5-nano`, and `text-embedding-3-small` deployments — using Bicep and the Azure Developer CLI (`azd`). Running `azd up` from the `01-introduction` directory provisions the resource and writes a root `.env` file that every module reads, so all Spring Boot apps run locally against the same shared backend. Use the configuration, cost, monitoring, and troubleshooting sections above to customize regions and capacity, control spend, and diagnose common deployment issues. When you're finished, `azd down` removes everything.
+This infrastructure deploys a single Microsoft Foundry resource — with `gpt-5.2`, `gpt-5.6-luna`, and `text-embedding-3-small` deployments — using Bicep and the Azure Developer CLI (`azd`). Running `azd up` from the `01-introduction` directory provisions the resource and writes a root `.env` file that every module reads, so all Spring Boot apps run locally against the same shared backend. Use the configuration, cost, monitoring, and troubleshooting sections above to customize regions and capacity, control spend, and diagnose common deployment issues. When you're finished, `azd down` removes everything.
 
 ---
 

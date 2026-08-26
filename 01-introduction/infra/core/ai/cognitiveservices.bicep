@@ -40,7 +40,7 @@ resource deployment1 'Microsoft.CognitiveServices/accounts/deployments@2024-10-0
   }
 }
 
-// Second deployment - deployments[1] (gpt-5-nano)
+// Second deployment - deployments[1] (gpt-5.6-luna)
 resource deployment2 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = if (length(deployments) > 1) {
   parent: cognitiveServices
   name: deployments[1].name

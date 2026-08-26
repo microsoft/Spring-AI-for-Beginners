@@ -20,7 +20,7 @@
 
 This first module introduces Microsoft Foundry and starts building production-style applications. It focuses on conversational AI that remembers context and maintains state.
 
-We'll use Microsoft Foundry's `gpt-5-nano` throughout this guide. It's fast and cheap, which keeps the focus on the patterns rather than waiting for responses. When you add memory, you'll clearly see the difference between stateless and stateful behavior. (Module 02 will switch to GPT-5.2 specifically to explore reasoning controls.)
+We'll use Microsoft Foundry's `gpt-5.6-luna` throughout this guide. It's fast and cheap, which keeps the focus on the patterns rather than waiting for responses. When you add memory, you'll clearly see the difference between stateless and stateful behavior. (Module 02 will switch to GPT-5.2 specifically to explore reasoning controls.)
 
 You'll build one application that demonstrates both patterns:
 
@@ -37,7 +37,7 @@ You'll build one application that demonstrates both patterns:
 
 > **Note:** Java, Maven, Azure CLI and Azure Developer CLI (azd) are pre-installed in the provided devcontainer.
 
-> **Note:** This module uses `gpt-5-nano` on Microsoft Foundry (via `AZURE_OPENAI_FAST_DEPLOYMENT`). The deployment is configured automatically via `azd up`.
+> **Note:** This module uses `gpt-5.6-luna` on Microsoft Foundry (via `AZURE_OPENAI_FAST_DEPLOYMENT`). The deployment is configured automatically via `azd up`.
 
 ## Understanding the Core Problem
 
@@ -161,7 +161,7 @@ azd up  # Select subscription and location (eastus2 recommended)
 > **Note:** If you encounter a timeout error (`RequestConflict: Cannot modify resource ... provisioning state is not terminal`), simply run `azd up` again. Azure resources may still be provisioning in the background, and retrying allows the deployment to complete once resources reach a terminal state.
 
 This will:
-1. Deploy Microsoft Foundry resource with GPT-5.2, gpt-5-nano, and text-embedding-3-small models
+1. Deploy Microsoft Foundry resource with GPT-5.2, gpt-5.6-luna, and text-embedding-3-small models
 2. Automatically generate `.env` file in project root with credentials
 3. Set up all required environment variables
 
@@ -313,7 +313,7 @@ Now try the same sequence here. Ask "My name is John" and then "What's my name?"
 
 *AI remembers your name from earlier in the conversation*
 
-Both panels use the same `gpt-5-nano` model. The only difference is memory. This makes it clear what memory brings to your application and why it's essential for real use cases.
+Both panels use the same `gpt-5.6-luna` model. The only difference is memory. This makes it clear what memory brings to your application and why it's essential for real use cases.
 
 ## Summary
 
