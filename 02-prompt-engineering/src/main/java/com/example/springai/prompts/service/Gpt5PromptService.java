@@ -1,9 +1,9 @@
 package com.example.springai.prompts.service;
 
 import com.openai.client.OpenAIClientAsync;
-import com.openai.models.chat.completions.ChatCompletionChunk;
-import com.openai.models.chat.completions.ChatCompletionCreateParams;
-import com.openai.models.chat.completions.ChatCompletionUserMessageParam;
+import com.openai.models.Reasoning;
+import com.openai.models.ReasoningEffort;
+import com.openai.models.responses.ResponseCreateParams;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
@@ -24,10 +24,10 @@ import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Gpt5PromptService - GPT-5.2 Prompting Best Practices
+ * Gpt5PromptService - gpt-5.6-luna Prompting Best Practices
  * Run: ./start.sh (from module directory, after deploying Azure resources with azd up)
  * 
- * Service demonstrating GPT-5.2 prompting best practices with Spring AI.
+ * Service demonstrating gpt-5.6-luna prompting best practices with Spring AI.
  * 
  * Based on OpenAI's GPT-5 Prompting Guide:
  * https://github.com/openai/openai-cookbook/blob/main/examples/gpt-5/gpt-5_prompting_guide.ipynb
@@ -72,29 +72,40 @@ public class Gpt5PromptService {
      * Streams tokens directly from the OpenAI async client, bypassing the
      * Spring AI SDK's collectList() which buffers the entire response.
      * Each token is emitted as it arrives from the API for real-time display.
+     *
+     * Uses the Responses API rather than Chat Completions: on Chat Completions a
+     * gpt-5.6 model finishes all of its reasoning before emitting the first text
+     * token (~58s of blank screen), while the Responses API streams from ~3s.
      */
     protected Flux<String> streamResponse(String prompt) {
-        log.info("[STREAM] Starting streaming request");
+        return streamResponse(prompt, ReasoningEffort.LOW);
+    }
+
+    /**
+     * Streaming with an explicit reasoning budget. {@code effort} is a real API
+     * parameter here, so the eagerness demos can show the model actually thinking
+     * more or less rather than only being asked to.
+     */
+    protected Flux<String> streamResponse(String prompt, ReasoningEffort effort) {
+        log.info("[STREAM] Starting streaming request (reasoning effort: {})", effort);
         log.debug("[STREAM] Prompt length: {} chars", prompt.length());
 
-        ChatCompletionCreateParams params = ChatCompletionCreateParams.builder()
+        ResponseCreateParams params = ResponseCreateParams.builder()
                 .model(deploymentName)
-                .addMessage(ChatCompletionUserMessageParam.builder()
-                        .content(prompt)
-                        .build())
+                .input(prompt)
+                .reasoning(Reasoning.builder().effort(effort).build())
                 .build();
 
         return Flux.create(sink -> {
-            openAIClientAsync.chat().completions().createStreaming(params)
-                    .subscribe(chunk -> {
+            openAIClientAsync.responses().createStreaming(params)
+                    .subscribe(event -> {
                         try {
-                            for (ChatCompletionChunk.Choice choice : chunk.choices()) {
-                                choice.delta().content().ifPresent(content -> {
-                                    if (!content.isEmpty()) {
-                                        sink.next(content);
-                                    }
-                                });
-                            }
+                            event.outputTextDelta().ifPresent(delta -> {
+                                String text = delta.delta();
+                                if (!text.isEmpty()) {
+                                    sink.next(text);
+                                }
+                            });
                         } catch (Exception e) {
                             sink.error(e);
                         }
@@ -108,6 +119,19 @@ public class Gpt5PromptService {
                         }
                     });
         });
+    }
+
+    /**
+     * Collects a Responses API stream into one string.
+     * Spring AI's own client is pinned to a 60s timeout here (its timeout properties are
+     * ignored), so the demos whose prompts run longer than that use this instead of
+     * {@code chatClient}. The short demos still use chatClient's fluent API.
+     */
+    private String blockingResponse(String prompt, ReasoningEffort effort) {
+        return streamResponse(prompt, effort)
+                .collect(StringBuilder::new, StringBuilder::append)
+                .map(StringBuilder::toString)
+                .block();
     }
 
     // ==================== EXAMPLE 1: LOW EAGERNESS ====================
@@ -149,7 +173,7 @@ public class Gpt5PromptService {
             
             Provide your answer:
             """.formatted(problem);
-        return streamResponse(prompt);
+        return streamResponse(prompt, ReasoningEffort.NONE);
     }
 
     // ==================== EXAMPLE 2: HIGH EAGERNESS ====================
@@ -167,7 +191,8 @@ public class Gpt5PromptService {
             Problem: %s
             """.formatted(problem);
 
-        return chatClient.prompt(prompt).call().content();
+        // Not chatClient here: this prompt runs past the 60s the Spring AI client is pinned to.
+        return blockingResponse(prompt, ReasoningEffort.MEDIUM);
     }
 
     /**
@@ -187,7 +212,8 @@ public class Gpt5PromptService {
         log.info("[STREAM] Starting streaming request for high-eagerness prompt");
         log.debug("[STREAM] Prompt: {}", prompt);
 
-        return streamResponse(prompt);
+        // MEDIUM, not HIGH: HIGH delays the first token to ~46s, which is a blank screen in the demo.
+        return streamResponse(prompt, ReasoningEffort.MEDIUM);
     }
 
     // ==================== EXAMPLE 3: TASK EXECUTION ====================
@@ -572,7 +598,8 @@ public class Gpt5PromptService {
             Problem: %s
             """.formatted(problem);
 
-        return chatClient.prompt(prompt).call().content();
+        // Measured at ~56s, close enough to the client's 60s ceiling to fail intermittently.
+        return blockingResponse(prompt, ReasoningEffort.LOW);
     }
 
     /**

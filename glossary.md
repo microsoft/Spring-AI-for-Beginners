@@ -36,7 +36,7 @@ A reference of the key terms, Spring AI abstractions, and AI/ML concepts used th
 - **Few-Shot Prompting** — Including a small number of input/output examples in the prompt so the model learns the desired pattern.
 - **Chain-of-Thought (CoT) Prompting** — Asking the model to show its reasoning step by step, which improves accuracy on multi-step or arithmetic problems.
 - **Role-Based Prompting** — Setting a persona (e.g., "act as a senior security auditor") to shape tone, depth, and expertise of the response.
-- **Reasoning Control** — A GPT-5.2 capability that lets you tell the model how much to think before answering.
+- **Reasoning Control** — Setting how much a reasoning model thinks before answering, via the `reasoning.effort` parameter (`none`, `low`, `medium`, `high`, `xhigh`, `max`) on the Responses API.
 - **Low Eagerness** — A reasoning-control setting for fast, direct answers; suitable for lookups and simple calculations.
 - **High Eagerness** — A reasoning-control setting for thorough, deep analysis; suitable for design and research tasks.
 - **Task Execution Pattern** — A prompt pattern in which the model restates the goal, plans steps, executes them, then summarizes the result.
@@ -153,8 +153,7 @@ These terms appear in multiple modules and are worth knowing throughout the cour
 
 - **LLM (Large Language Model)** — A neural network trained on large amounts of text that can generate and reason about natural language.
 - **Provider** — The service that hosts the LLM (Microsoft Foundry, OpenAI, etc.); Spring AI lets you switch providers without changing application code.
-- **gpt-5.2** — A Microsoft Foundry reasoning model with adjustable thinking effort. Used by Module 02 only, to demonstrate prompt engineering with reasoning controls.
-- **gpt-5.6-luna** — A fast, low-latency GPT-5.6 chat model. Used by Modules 01, 03, 04, 05, and 06 to keep demos responsive while focusing on Spring AI patterns rather than model latency.
+- **gpt-5.6-luna** — A Microsoft Foundry reasoning model with adjustable thinking effort. Used by every module; Module 02 varies its reasoning effort to demonstrate reasoning control.
 - **text-embedding-3-small** — A Microsoft Foundry embedding model that converts text into 1,536-dimensional vectors. Used by Module 03 only, to power the RAG pipeline's vector store and semantic search.
 - **azd (Azure Developer CLI)** — The command-line tool that provisions the Microsoft Foundry resource and model deployments for modules 1–6 (`azd up`); see [01-introduction/infra/README.md](01-introduction/infra/README.md).
 - **Bicep** — Azure's infrastructure-as-code language used by Module 01 to define the Microsoft Foundry resource and model deployments.
@@ -169,6 +168,6 @@ These terms appear in multiple modules and are worth knowing throughout the cour
 - **Environment variables** — The shared `.env` file at the repo root provides credentials to every module:
   - `AZURE_OPENAI_ENDPOINT` — Microsoft Foundry resource URL.
   - `AZURE_OPENAI_API_KEY` — Foundry API key.
-  - `AZURE_OPENAI_DEPLOYMENT` — reasoning chat deployment name (`gpt-5.2`), used by Module 02.
-  - `AZURE_OPENAI_FAST_DEPLOYMENT` — fast chat deployment name (`gpt-5.6-luna`), used by Modules 01, 03, 04, 05, 06.
+  - `AZURE_OPENAI_DEPLOYMENT` — chat deployment name (`gpt-5.6-luna`).
+  - `AZURE_OPENAI_FAST_DEPLOYMENT` — same `gpt-5.6-luna` deployment; kept as a separate variable so you can point modules at a different model without code changes.
   - `AZURE_OPENAI_EMBEDDING_DEPLOYMENT` — embedding deployment name (`text-embedding-3-small`), used by Module 03.

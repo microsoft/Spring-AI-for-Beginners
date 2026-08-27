@@ -1,5 +1,6 @@
 package com.example.springai.prompts.service;
 
+import com.openai.models.ReasoningEffort;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.AssistantMessage;
 import org.springframework.ai.chat.messages.Message;
@@ -108,15 +109,18 @@ class SimpleGpt5PromptTest {
     void shouldGenerateHighEagernessPrompt() {
         // Given
         String problem = "Design a scalable microservices architecture";
+        TestableStreamingPromptService streamingService = new TestableStreamingPromptService(
+            Flux.just("analysis")
+        );
 
         // When
-        promptService.solveAutonomous(problem);
+        String result = streamingService.solveAutonomous(problem);
 
         // Then
-        verify(mockChatModel).call(promptCaptor.capture());
-        String actualPrompt = getPromptText(promptCaptor.getValue());
-        
-        assertThat(actualPrompt)
+        assertThat(result).isEqualTo("analysis");
+        assertThat(streamingService.efforts()).containsExactly(ReasoningEffort.MEDIUM);
+        assertThat(streamingService.prompts()).hasSize(1);
+        assertThat(streamingService.prompts().get(0))
             .contains("thoroughly")
             .contains("comprehensive solution")
             .contains("multiple approaches")
@@ -325,14 +329,18 @@ class SimpleGpt5PromptTest {
     void shouldGenerateReasoningPrompt() {
         // Given
         String problem = "Calculate the compound interest";
+        TestableStreamingPromptService streamingService = new TestableStreamingPromptService(
+            Flux.just("reasoning")
+        );
 
         // When
-        promptService.solveWithReasoning(problem);
+        String result = streamingService.solveWithReasoning(problem);
 
         // Then
-        verify(mockChatModel).call(promptCaptor.capture());
-        String actualPrompt = getPromptText(promptCaptor.getValue());
-        
+        assertThat(result).isEqualTo("reasoning");
+        assertThat(streamingService.efforts()).containsExactly(ReasoningEffort.LOW);
+        String actualPrompt = streamingService.prompts().get(0);
+
         assertThat(actualPrompt)
             .contains("step by step")
             .contains("understand the problem")
@@ -448,15 +456,18 @@ class SimpleGpt5PromptTest {
 
         private final Queue<Flux<String>> responses = new ArrayDeque<>();
         private final List<String> prompts = new ArrayList<>();
+        private final List<ReasoningEffort> efforts = new ArrayList<>();
 
         @SafeVarargs
         TestableStreamingPromptService(Flux<String>... responses) {
             this.responses.addAll(List.of(responses));
         }
 
+        // Every streaming path funnels through this overload, so one override covers them all.
         @Override
-        protected Flux<String> streamResponse(String prompt) {
+        protected Flux<String> streamResponse(String prompt, ReasoningEffort effort) {
             prompts.add(prompt);
+            efforts.add(effort);
             Flux<String> response = responses.poll();
             if (response == null) {
                 return Flux.error(new IllegalStateException("No streaming response configured"));
@@ -466,6 +477,10 @@ class SimpleGpt5PromptTest {
 
         List<String> prompts() {
             return prompts;
+        }
+
+        List<ReasoningEffort> efforts() {
+            return efforts;
         }
     }
 }

@@ -1,0 +1,46 @@
+@startuml prompt-structure
+' Rendered with: java -jar tools/plantuml.jar -tpng 02-prompt-engineering/images/prompt-structure.puml
+' Output name comes from the @startuml id, not the filename.
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 13
+skinparam shadowing false
+skinparam roundCorner 10
+skinparam ArrowColor #6E7781
+skinparam TitleFontSize 20
+skinparam TitleFontColor #24292F
+skinparam RectangleBorderThickness 2
+skinparam RectangleFontColor #24292F
+skinparam NoteBackgroundColor #F6F8FA
+skinparam NoteBorderColor #D0D7DE
+skinparam NoteFontColor #57606A
+skinparam NoteFontSize 12
+skinparam ranksep 18
+skinparam nodesep 18
+
+title Anatomy of a request — two separate dials
+
+rectangle "== Responses API request" as REQ #F6F8FA {
+
+  rectangle "== reasoning.effort\nnone | low | medium | high\n\n<size:12>How long the model thinks</size>\n<size:12>before it starts answering.</size>" as EFFORT #EAEEF2
+
+  rectangle "== input  <size:12>(the prompt)</size>" as INPUT #FFFFFF {
+    rectangle "<system>\n<size:12>Who the model is and how it should behave</size>" as SYS #E6F4EA
+    rectangle "<instructions>\n<size:12>What to do, step by step</size>" as INS #DDF4E4
+    rectangle "<context>\n<size:12>Background the model needs</size>" as CTX #FFF8C5
+    rectangle "<user-input>\n<size:12>The actual question or data</size>" as USR #FFF1E5
+    rectangle "<constraints>\n<size:12>Format, length, things to avoid</size>" as CON #FFEBE9
+
+    SYS -down-> INS
+    INS -down-> CTX
+    CTX -down-> USR
+    USR -down-> CON
+  }
+}
+
+EFFORT -right[hidden]-> SYS
+
+note right of EFFORT : An **API parameter**,\nnot text inside the prompt.
+
+@enduml

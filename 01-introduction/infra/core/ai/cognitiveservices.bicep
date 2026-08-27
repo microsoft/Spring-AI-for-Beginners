@@ -22,7 +22,7 @@ resource cognitiveServices 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   }
 }
 
-// First deployment - deployments[0] (gpt-5.2)
+// First deployment - deployments[0] (gpt-5.6-luna)
 // NOTE: raiPolicyName *must* be set to null here.
 // Leaving it out causes long-running / stuck deployments for some models
 // in this tenant/region, due to how the RP auto-attaches RAI policies.

@@ -1,8 +1,8 @@
 package com.example.springai.prompts.config;
 
 import com.openai.client.OpenAIClientAsync;
+import com.openai.client.okhttp.OpenAIOkHttpClientAsync;
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.openai.setup.OpenAiSetup;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -14,12 +14,11 @@ import org.springframework.context.annotation.Configuration;
  * and {@code ChatClient.Builder} from properties in application.yaml. Azure mode is
  * detected automatically when the base URL contains openai.azure.com.
  *
- * Note: For GPT-5 reasoning effort is controlled through prompt engineering
- * rather than model configuration parameters. See Gpt5PromptService for examples of how to
- * use prompts like "&lt;reasoning_effort&gt;low&lt;/reasoning_effort&gt;" to control model behavior.
+ * Note: reasoning effort is set as a real API parameter on the Responses API.
+ * See Gpt5PromptService#streamResponse, which passes a {@link com.openai.models.ReasoningEffort}.
  *
  * 💡 Ask GitHub Copilot:
- * - "Why is reasoning_effort set via prompts here instead of as an API parameter?"
+ * - "Why does this stream via the Responses API instead of Chat Completions?"
  * - "When does it make sense to expose multiple chat model beans with different configurations?"
  * - "How would I inject Azure AD (managed identity) credentials here instead of an API key?"
  * - "How do I test this configuration without making real Microsoft Foundry calls?"
@@ -32,9 +31,6 @@ public class SpringAiConfig {
 
     @Value("${AZURE_OPENAI_API_KEY}")
     private String azureApiKey;
-
-    @Value("${AZURE_OPENAI_DEPLOYMENT}")
-    private String deploymentName;
 
     /**
      * High-level fluent chat API. Built from the auto-configured {@link ChatClient.Builder}
@@ -51,13 +47,21 @@ public class SpringAiConfig {
      * The Spring AI SDK's stream() method uses collectList() which buffers
      * the entire response, destroying real-time token delivery. This bean
      * lets the streaming service bypass that and stream tokens as they arrive.
+     * Spring AI 2.0.1's ChatClient has no Responses API surface, so the
+     * streaming path needs this client directly.
+     *
+     * Points at Azure's OpenAI-compatible {@code /openai/v1} surface rather than the
+     * deployment-scoped one, because the Responses API lives at /openai/v1/responses.
+     * Azure accepts the API key as a bearer token there.
      */
     @Bean
     public OpenAIClientAsync openAIClientAsync() {
-        return OpenAiSetup.setupAsyncClient(
-                azureEndpoint, azureApiKey, null, deploymentName,
-                null, null, true, false, deploymentName,
-                java.time.Duration.ofSeconds(60), 3, null, null,
-                io.micrometer.observation.ObservationRegistry.NOOP, null, java.util.List.of());
+        return OpenAIOkHttpClientAsync.builder()
+                .baseUrl(azureEndpoint.replaceAll("/+$", "") + "/openai/v1")
+                .apiKey(azureApiKey)
+                .timeout(java.time.Duration.ofSeconds(180))
+                // One retry, not three: retrying a 180s call four times hangs the demo for minutes.
+                .maxRetries(1)
+                .build();
     }
 }

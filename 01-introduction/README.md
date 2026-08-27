@@ -20,7 +20,7 @@
 
 This first module introduces Microsoft Foundry and starts building production-style applications. It focuses on conversational AI that remembers context and maintains state.
 
-We'll use Microsoft Foundry's `gpt-5.6-luna` throughout this guide. It's fast and cheap, which keeps the focus on the patterns rather than waiting for responses. When you add memory, you'll clearly see the difference between stateless and stateful behavior. (Module 02 will switch to GPT-5.2 specifically to explore reasoning controls.)
+We'll use Microsoft Foundry's `gpt-5.6-luna` throughout this guide. It's fast and cheap, which keeps the focus on the patterns rather than waiting for responses. When you add memory, you'll clearly see the difference between stateless and stateful behavior. (Module 02 keeps the same model but turns its reasoning effort up and down to explore reasoning control.)
 
 You'll build one application that demonstrates both patterns:
 
@@ -59,7 +59,7 @@ Before diving into conversations, it's important to understand tokens - the basi
 
 *Example of how text is broken into tokens - "I love AI!" becomes 4 separate processing units*
 
-Tokens are how AI models measure and process text. Words, punctuation, and even spaces can be tokens. Your model has a limit of how many tokens it can process at once (400,000 for GPT-5.2, with up to 272,000 input tokens and 128,000 output tokens). Understanding tokens helps you manage conversation length and costs.
+Tokens are how AI models measure and process text. Words, punctuation, and even spaces can be tokens. Your model has a limit of how many tokens it can process at once (400,000 for gpt-5.6-luna, with up to 272,000 input tokens and 128,000 output tokens). Understanding tokens helps you manage conversation length and costs.
 
 ## How Memory Works
 
@@ -161,7 +161,7 @@ azd up  # Select subscription and location (eastus2 recommended)
 > **Note:** If you encounter a timeout error (`RequestConflict: Cannot modify resource ... provisioning state is not terminal`), simply run `azd up` again. Azure resources may still be provisioning in the background, and retrying allows the deployment to complete once resources reach a terminal state.
 
 This will:
-1. Deploy Microsoft Foundry resource with GPT-5.2, gpt-5.6-luna, and text-embedding-3-small models
+1. Deploy Microsoft Foundry resource with gpt-5.6-luna and text-embedding-3-small models
 2. Automatically generate `.env` file in project root with credentials
 3. Set up all required environment variables
 
@@ -321,7 +321,7 @@ In this module you built your first production-style Spring AI application on Mi
 
 ## Next Steps
 
-**Next Module:** [02-prompt-engineering - Prompt Engineering with GPT-5.2](../02-prompt-engineering/README.md)
+**Next Module:** [02-prompt-engineering - Prompt Engineering with gpt-5.6-luna](../02-prompt-engineering/README.md)
 
 ---
 
