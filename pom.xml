@@ -33,6 +33,8 @@
     <pdfbox.version>2.0.31</pdfbox.version>
     <!-- Spring AI version -->
     <spring.ai.version>2.0.1</spring.ai.version>
+    <!-- Must match the openai-java-core that spring-ai-openai resolves -->
+    <openai.java.version>4.49.0</openai.java.version>
     <!-- Maven plugin versions -->
     <maven.surefire.version>3.5.4</maven.surefire.version>
     <maven.compiler.plugin.version>3.13.0</maven.compiler.plugin.version>
@@ -61,6 +63,12 @@
         <type>pom</type>
         <scope>import</scope>
       </dependency>
+
+      <dependency>
+        <groupId>com.openai</groupId>
+        <artifactId>openai-java-client-okhttp</artifactId>
+        <version>${openai.java.version}</version>
+      </dependency>
       
       <!-- Testing dependencies - JUnit managed by Spring Boot BOM -->
       <dependency>
@@ -68,8 +76,7 @@
         <artifactId>assertj-core</artifactId>
         <version>${assertj.version}</version>
         <scope>test</scope>
-      </dependency>
-      <dependency>
+      </dependency>      <dependency>
         <groupId>org.testcontainers</groupId>
         <artifactId>testcontainers</artifactId>
         <version>${testcontainers.version}</version>

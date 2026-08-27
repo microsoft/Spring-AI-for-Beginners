@@ -19,18 +19,6 @@ param openAiSkuName string = 'S0'
 @description('Model deployments for Microsoft Foundry')
 param openAiDeployments array = [
   {
-    name: 'gpt-5.2'
-    model: {
-      format: 'OpenAI'
-      name: 'gpt-5.2'
-      version: '2025-12-11'
-    }
-    sku: {
-      name: 'GlobalStandard'
-      capacity: 10000
-    }
-  }
-  {
     name: 'gpt-5.6-luna'
     model: {
       format: 'OpenAI'
@@ -38,8 +26,11 @@ param openAiDeployments array = [
       version: '2026-07-09'
     }
     sku: {
+      // Capacity is a rate limit (1 unit = 1,000 TPM), not a speed setting, and the
+      // per-model quota for this SKU is commonly 10,000 units for a whole subscription.
+      // 100 units is ample for one learner and leaves room for other environments.
       name: 'GlobalStandard'
-      capacity: 9000
+      capacity: 100
     }
   }
   {
@@ -92,7 +83,7 @@ output AZURE_RESOURCE_GROUP_ID string = rg.id
 output AZURE_RESOURCE_GROUP_NAME string = rg.name
 
 output AZURE_OPENAI_ENDPOINT string = openAi.outputs.endpoint
-output AZURE_OPENAI_DEPLOYMENT string = 'gpt-5.2'
+output AZURE_OPENAI_DEPLOYMENT string = 'gpt-5.6-luna'
 output AZURE_OPENAI_FAST_DEPLOYMENT string = 'gpt-5.6-luna'
 output AZURE_OPENAI_EMBEDDING_DEPLOYMENT string = 'text-embedding-3-small'
 output AZURE_OPENAI_NAME string = openAi.outputs.name

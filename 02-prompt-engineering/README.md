@@ -1,4 +1,4 @@
-# Module 02: Prompt Engineering with GPT-5.2
+# Module 02: Prompt Engineering with gpt-5.6-luna
 
 ## Table of Contents
 
@@ -33,9 +33,9 @@ The following diagram provides an overview of the key topics and skills you'll d
 
 <img src="images/what-youll-learn.png" alt="What You'll Learn" width="800"/>
 
-In the previous module, you explored basic Spring AI interactions with Microsoft Foundry and saw how memory enables conversational AI. Now we'll focus on how you ask questions — the prompts themselves — using Microsoft Foundry's GPT-5.2. The way you structure your prompts dramatically affects the quality of responses you get. We start with a review of the fundamental prompting techniques, then move into eight advanced patterns that take full advantage of GPT-5.2's capabilities.
+In the previous module, you explored basic Spring AI interactions with Microsoft Foundry and saw how memory enables conversational AI. Now we'll focus on how you ask questions — the prompts themselves — using the same `gpt-5.6-luna` model. The way you structure your prompts dramatically affects the quality of responses you get. We start with a review of the fundamental prompting techniques, then move into eight advanced patterns that take full advantage of the model's reasoning capabilities.
 
-We'll use GPT-5.2 because it introduces reasoning control - you can tell the model how much thinking to do before answering. This makes different prompting strategies more apparent and helps you understand when to use each approach.
+We'll use `gpt-5.6-luna` because it's a reasoning model with adjustable reasoning effort - you can tell the model how much thinking to do before answering. This makes different prompting strategies more apparent and helps you understand when to use each approach.
 
 ## Prerequisites
 
@@ -44,7 +44,7 @@ We'll use GPT-5.2 because it introduces reasoning control - you can tell the mod
 
 > **Note:** If you haven't completed Module 01, follow the deployment instructions there first.
 
-> **Why this module is different:** The other Foundry modules (01, 03, 04, 05, 06) use `gpt-5.6-luna` for speed. This module is the *only* one that uses **gpt-5.2** because reasoning control is the subject of the demos — you'll be adjusting reasoning effort and watching the behaviour change. Expect responses here to be slower than in other modules; that's the point.
+> **Why this module is different:** Every module in this course uses the same `gpt-5.6-luna` deployment. What's different here is *how* it's called — this module sets **reasoning effort** as an explicit API parameter and streams via the Responses API, so you can watch the model's thinking budget change its behaviour. The low-eagerness demo asks for `none`, the high-eagerness one asks for `medium`; expect that second one to take noticeably longer, and that's the point.
 
 ## Understanding Prompt Engineering
 
@@ -175,21 +175,21 @@ String response = chatClient.prompt(prompt).call().content();
 
 ---
 
-These five fundamentals give you a solid toolkit for most prompting tasks. The rest of this module builds on them with **eight advanced patterns** that leverage GPT-5.2's reasoning control, self-evaluation, and structured output capabilities.
+These five fundamentals give you a solid toolkit for most prompting tasks. The rest of this module builds on them with **eight advanced patterns** that leverage gpt-5.6-luna's reasoning control, self-evaluation, and structured output capabilities.
 
 ## Advanced Patterns
 
-With the fundamentals covered, let's move to the eight advanced patterns that make this module unique. Not all problems need the same approach. Some questions need quick answers, others need deep thinking. Some need visible reasoning, others just need results. Each pattern below is optimized for a different scenario — and GPT-5.2's reasoning control makes the differences even more pronounced.
+With the fundamentals covered, let's move to the eight advanced patterns that make this module unique. Not all problems need the same approach. Some questions need quick answers, others need deep thinking. Some need visible reasoning, others just need results. Each pattern below is optimized for a different scenario — and gpt-5.6-luna's reasoning control makes the differences even more pronounced.
 
 <img src="images/eight-patterns.png" alt="Eight Prompting Patterns" width="800"/>
 
 *Overview of the eight prompt engineering patterns and their use cases*
 
-GPT-5.2 adds another dimension to these patterns: *reasoning control*. The slider below shows how you can adjust the model's thinking effort — from quick, direct answers to deep, thorough analysis.
+`gpt-5.6-luna` adds another dimension to these patterns: *reasoning control*. You set `reasoning.effort` per request, and it changes how long the model thinks before it starts answering.
 
-<img src="images/reasoning-control.png" alt="Reasoning Control with GPT-5.2" width="800"/>
+<img src="images/reasoning-control.png" alt="Reasoning effort levels and their measured time to first token" width="800"/>
 
-*GPT-5.2's reasoning control lets you specify how much thinking the model should do — from fast direct answers to deep exploration*
+*The same deployment at four different thinking budgets — `none` answers immediately, `high` disappears for the better part of a minute*
 
 **Low Eagerness (Quick & Focused)** - For simple questions where you want fast, direct answers. The model does minimal reasoning - maximum 2 steps. Use this for calculations, lookups, or straightforward questions.
 
@@ -431,9 +431,11 @@ The following diagram shows how constraints guide the model to produce output th
 
 ## How This Uses Spring AI
 
-This module uses the same Spring AI dependency introduced in [Module 01](../01-introduction/README.md#how-this-uses-spring-ai) — `spring-ai-starter-model-openai` — which auto-configures `OpenAiChatModel` and a `ChatClient.Builder` for Microsoft Foundry. The service code in this module injects `ChatClient` and uses its fluent API for every call. No additional Spring AI dependencies are needed.
+This module builds on the Spring AI dependency introduced in [Module 01](../01-introduction/README.md#how-this-uses-spring-ai) — `spring-ai-starter-model-openai` — which auto-configures `OpenAiChatModel` and a `ChatClient.Builder` for Microsoft Foundry. The short demos inject `ChatClient` and use its fluent API.
 
-The `application.yaml` configuration is nearly identical to Module 01 — the only difference is the deployment variable: this module points `AZURE_OPENAI_DEPLOYMENT` at the GPT-5.2 deployment, whereas Module 01 uses `AZURE_OPENAI_FAST_DEPLOYMENT` for gpt-5.6-luna ([application.yaml](src/main/resources/application.yaml)):
+Two things are different here. First, this module adds `openai-java-client-okhttp` so it can talk to the **Responses API**, which is where `reasoning.effort` actually takes effect and where streaming starts emitting text in seconds rather than after the model has finished thinking. Second, Spring AI's own client is pinned to a 60s timeout that its timeout properties don't override, so the two demos whose prompts run longer than that (`autonomous` and `reason`) collect the Responses stream instead of calling `chatClient`.
+
+The `application.yaml` points at the same `gpt-5.6-luna` deployment as Module 01, and lowers the retry count so a slow prompt fails once rather than four times ([application.yaml](src/main/resources/application.yaml)):
 
 ```yaml
 spring:
@@ -442,11 +444,13 @@ spring:
       base-url: ${AZURE_OPENAI_ENDPOINT}
       api-key: ${AZURE_OPENAI_API_KEY}
       microsoft-deployment-name: ${AZURE_OPENAI_DEPLOYMENT}
+      max-retries: 1
       chat:
         model: ${AZURE_OPENAI_DEPLOYMENT}
+        max-retries: 1
 ```
 
-Beyond that deployment swap, the difference in this module is how the prompts are constructed — the rest of the model configuration stays the same.
+The streaming client itself is built in [SpringAiConfig](src/main/java/com/example/springai/prompts/config/SpringAiConfig.java) and points at Azure's OpenAI-compatible `/openai/v1` surface, because the Responses API is not deployment-scoped the way Chat Completions is.
 
 The diagram below shows the Spring AI components involved in prompt engineering — `PromptTemplate` resolves variables into a `Prompt`, `ChatClient` sends it to the model via `ChatModel`, and you get a structured response back.
 
@@ -608,7 +612,7 @@ Ask "What is Spring Boot?" then immediately follow up with "Show me an example".
 
 <img src="images/multi-turn-chat-demo.png" alt="Multi-Turn Chat demo" width="800"/>
 
-*Follow-up “Show me an example” is answered with a Spring Boot sample — context from the previous turn was preserved*
+*Follow-up “Show me a minimal example” never mentions Spring Boot — the answer still does, because context from the previous turn was preserved*
 
 ### Step-by-Step Reasoning
 
@@ -616,7 +620,7 @@ Pick a math problem and try it with both Step-by-Step Reasoning and Low Eagernes
 
 <img src="images/step-by-step-reasoning-demo.png" alt="Step-by-Step Reasoning demo" width="800"/>
 
-*Each calculation shown explicitly — distances, times, and the final average speed*
+*Understanding, approach, then each step laid out explicitly before the conclusion*
 
 ### Constrained Output
 
@@ -630,15 +634,15 @@ When you need specific formats or word counts, this pattern enforces strict adhe
 
 **Reasoning Effort Changes Everything**
 
-GPT-5.2 lets you control computational effort through your prompts. Low effort means fast responses with minimal exploration. High effort means the model takes time to think deeply. You're learning to match effort to task complexity - don't waste time on simple questions, but don't rush complex decisions either.
+`gpt-5.6-luna` lets you control how much computation it spends before answering, using the `reasoning.effort` parameter — this is an API setting, not something you write into the prompt. Low effort means fast responses with minimal exploration. High effort means the model takes time to think deeply. You're learning to match effort to task complexity - don't waste time on simple questions, but don't rush complex decisions either.
 
 **Structure Guides Behavior**
 
-Notice the XML tags in the prompts? They're not decorative. Models follow structured instructions more reliably than freeform text. When you need multi-step processes or complex logic, structure helps the model track where it is and what comes next. The diagram below breaks down a well-structured prompt, showing how tags like `<system>`, `<instructions>`, `<context>`, `<user-input>`, and `<constraints>` organize your instructions into clear sections.
+Notice the XML tags in the prompts? They're not decorative. Models follow structured instructions more reliably than freeform text. When you need multi-step processes or complex logic, structure helps the model track where it is and what comes next. The diagram below breaks down a request: `reasoning.effort` is a dial you set alongside the prompt, while tags like `<system>`, `<instructions>`, `<context>`, `<user-input>`, and `<constraints>` organize the prompt itself into clear sections.
 
-<img src="images/prompt-structure.png" alt="Prompt Structure" width="800"/>
+<img src="images/prompt-structure.png" alt="Anatomy of a request: reasoning effort as an API parameter alongside the structured prompt" width="800"/>
 
-*Anatomy of a well-structured prompt with clear sections and XML-style organization*
+*Two separate dials — the reasoning budget you pass to the API, and the structure you put inside the prompt*
 
 **Quality Through Self-Evaluation**
 
@@ -650,7 +654,7 @@ Multi-turn conversations work by including message history with each request via
 
 ## Summary
 
-In this module you focused on *how* you ask — using Microsoft Foundry's GPT-5.2 and its reasoning controls. You reviewed the fundamental prompting techniques and then worked through advanced patterns: tool preambles, self-reflecting code, structured analysis, multi-turn chat, step-by-step reasoning, and constrained output. The key lesson is that prompt structure dramatically affects response quality, and that making your quality criteria explicit turns generation into a repeatable process. Next, you'll ground responses in your own data with RAG.
+In this module you focused on *how* you ask — using Microsoft Foundry's gpt-5.6-luna and its reasoning controls. You reviewed the fundamental prompting techniques and then worked through advanced patterns: tool preambles, self-reflecting code, structured analysis, multi-turn chat, step-by-step reasoning, and constrained output. The key lesson is that prompt structure dramatically affects response quality, and that making your quality criteria explicit turns generation into a repeatable process. Next, you'll ground responses in your own data with RAG.
 
 ## Next Steps
 

@@ -272,8 +272,19 @@ function renderMarkdown(src) {
     const out = [];
     let i = 0;
 
+    // Allowlist rather than blocking javascript:, so odd encodings fall through to plain text.
+    function safeUrl(u) {
+        const t = String(u).trim();
+        if (/^(?:https?:\/\/|mailto:)[^\s]+$/i.test(t)) return t;  // absolute, non-executable
+        if (/^[#\/][^\s]*$/.test(t)) return t;                     // anchor or root-relative
+        if (/^[\w.-]+(?:\/[^\s]*)?$/.test(t)) return t;            // plain relative path
+        return null;                                               // anything else: render as text
+    }
+
     function htmlEscape(s) {
-        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        // Quotes matter too: the fence language is interpolated into a class="" attribute.
+        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
     function inline(s) {
@@ -287,7 +298,12 @@ function renderMarkdown(src) {
         s = s.replace(/__([^_\n]+)__/g, '<strong>$1</strong>');
         s = s.replace(/(^|[^*\w])\*([^*\n]+?)\*(?![*\w])/g, '$1<em>$2</em>');
         s = s.replace(/(^|[^_\w])_([^_\n]+?)_(?![_\w])/g, '$1<em>$2</em>');
-        s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+        s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_m, text, url) {
+            const safe = safeUrl(url);
+            return safe === null
+                ? text
+                : '<a href="' + safe + '" target="_blank" rel="noopener noreferrer">' + text + '</a>';
+        });
         s = s.replace(/\u0000C(\d+)\u0000/g, function (_m, idx) {
             return '<code>' + codeStash[parseInt(idx, 10)] + '</code>';
         });
@@ -307,9 +323,15 @@ function renderMarkdown(src) {
         return l.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); });
     }
 
-    function blockBoundary(l) {
+    function isTableStart(idx) {
+        return idx + 1 < lines.length && lines[idx].indexOf('|') >= 0 && isTableSep(lines[idx + 1]);
+    }
+
+    function blockBoundary(idx) {
+        // Needs the index, not the line, so a table start can be spotted via its separator row.
+        const l = lines[idx];
         return isBlank(l) || isHeading(l) || isHr(l) || isFence(l) ||
-               isUlItem(l) || isOlItem(l) || isQuote(l);
+               isUlItem(l) || isOlItem(l) || isQuote(l) || isTableStart(idx);
     }
 
     while (i < lines.length) {
@@ -340,7 +362,7 @@ function renderMarkdown(src) {
             i++; continue;
         }
 
-        if (line.indexOf('|') >= 0 && i + 1 < lines.length && isTableSep(lines[i + 1])) {
+        if (isTableStart(i)) {
             const header = splitRow(line);
             i += 2;
             const rows = [];
@@ -364,7 +386,7 @@ function renderMarkdown(src) {
             while (i < lines.length && isUlItem(lines[i])) {
                 let item = lines[i].replace(/^\s*[-*+]\s+/, '');
                 i++;
-                while (i < lines.length && !blockBoundary(lines[i])) {
+                while (i < lines.length && !blockBoundary(i)) {
                     item += ' ' + lines[i].trim(); i++;
                 }
                 items.push('<li>' + inline(item) + '</li>');
@@ -378,7 +400,7 @@ function renderMarkdown(src) {
             while (i < lines.length && isOlItem(lines[i])) {
                 let item = lines[i].replace(/^\s*\d+\.\s+/, '');
                 i++;
-                while (i < lines.length && !blockBoundary(lines[i])) {
+                while (i < lines.length && !blockBoundary(i)) {
                     item += ' ' + lines[i].trim(); i++;
                 }
                 items.push('<li>' + inline(item) + '</li>');
@@ -398,7 +420,7 @@ function renderMarkdown(src) {
 
         const para = [line];
         i++;
-        while (i < lines.length && !blockBoundary(lines[i])) {
+        while (i < lines.length && !blockBoundary(i)) {
             para.push(lines[i]); i++;
         }
         out.push('<p>' + inline(para.join(' ')) + '</p>');

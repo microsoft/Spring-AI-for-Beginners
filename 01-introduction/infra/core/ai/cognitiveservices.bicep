@@ -22,13 +22,15 @@ resource cognitiveServices 'Microsoft.CognitiveServices/accounts@2024-10-01' = {
   }
 }
 
-// First deployment - deployments[0] (gpt-5.2)
+// First deployment - deployments[0] (gpt-5.6-luna)
 // NOTE: raiPolicyName *must* be set to null here.
 // Leaving it out causes long-running / stuck deployments for some models
 // in this tenant/region, due to how the RP auto-attaches RAI policies.
 // Do not remove unless you've tested end-to-end.
-// NOTE: We hard-code three deployments and sequence them with dependsOn
+// NOTE: We hard-code three deployment slots and sequence them with dependsOn
 // to avoid parallel deployment conflicts on the same OpenAI account.
+// Each slot is conditional, so passing fewer entries just leaves the extras unused
+// (main.bicep currently passes two: the chat model and the embedding model).
 // Previous attempts with a for-loop + concurrent deployments caused timeouts.
 resource deployment1 'Microsoft.CognitiveServices/accounts/deployments@2024-10-01' = if (length(deployments) > 0) {
   parent: cognitiveServices

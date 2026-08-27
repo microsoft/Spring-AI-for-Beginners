@@ -31,9 +31,8 @@ This directory contains the Azure infrastructure as code (IaC) using Bicep and A
 The infrastructure deploys the following Azure resources:
 
 ### AI Services
-- **Microsoft Foundry**: Cognitive Services with three model deployments:
-  - **gpt-5.2**: Reasoning chat model used by Module 02 (prompt engineering)
-  - **gpt-5.6-luna**: Fast, low-latency chat model used by all other modules (01, 03, 04, 05, 06)
+- **Microsoft Foundry**: Cognitive Services with two model deployments:
+  - **gpt-5.6-luna**: Reasoning chat model used by every module. Module 02 varies its reasoning effort
   - **text-embedding-3-small**: Embedding model for RAG (Module 03)
 
 ### Local Development
@@ -78,7 +77,7 @@ When prompted:
 - Confirm the environment name (default: `spring-ai-dev`)
 
 This will create:
-- Microsoft Foundry resource with GPT-5.2, gpt-5.6-luna, and text-embedding-3-small
+- Microsoft Foundry resource with gpt-5.6-luna and text-embedding-3-small
 - Output connection details
 
 ### 2. Get Connection Details
@@ -96,8 +95,8 @@ azd env get-values
 This displays:
 - `AZURE_OPENAI_ENDPOINT`: Your Microsoft Foundry endpoint URL
 - `AZURE_OPENAI_KEY`: API key returned by `azd`; the post-provision scripts write this to `AZURE_OPENAI_API_KEY` in `.env` for local apps
-- `AZURE_OPENAI_DEPLOYMENT`: Reasoning chat model name (gpt-5.2) — used by Module 02
-- `AZURE_OPENAI_FAST_DEPLOYMENT`: Fast chat model name (gpt-5.6-luna) — used by all other modules
+- `AZURE_OPENAI_DEPLOYMENT`: Reasoning chat model name (gpt-5.6-luna) — used by Module 02
+- `AZURE_OPENAI_FAST_DEPLOYMENT`: Chat model name (gpt-5.6-luna) — same deployment, kept as a separate variable
 - `AZURE_OPENAI_EMBEDDING_DEPLOYMENT`: Embedding model name
 
 ### 3. Run Applications Locally
@@ -145,19 +144,7 @@ To change model deployments, edit `infra/main.bicep` and modify the `openAiDeplo
 ```bicep
 param openAiDeployments array = [
   {
-    name: 'gpt-5.2'  // Reasoning model used by Module 02
-    model: {
-      format: 'OpenAI'
-      name: 'gpt-5.2'
-      version: '2025-12-11'
-    }
-    sku: {
-      name: 'GlobalStandard'
-      capacity: 10000
-    }
-  }
-  {
-    name: 'gpt-5.6-luna'  // Fast, low-latency model used by all other modules
+    name: 'gpt-5.6-luna'  // Chat model used by every module
     model: {
       format: 'OpenAI'
       name: 'gpt-5.6-luna'
@@ -165,7 +152,19 @@ param openAiDeployments array = [
     }
     sku: {
       name: 'GlobalStandard'
-      capacity: 9000
+      capacity: 100
+    }
+  }
+  {
+    name: 'text-embedding-3-small'  // Embedding model used by Module 03
+    model: {
+      format: 'OpenAI'
+      name: 'text-embedding-3-small'
+      version: '1'
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 20
     }
   }
   // Add more deployments...
@@ -174,17 +173,19 @@ param openAiDeployments array = [
 
 Available models and versions: https://learn.microsoft.com/azure/ai-services/openai/concepts/models
 
+`capacity` is a rate limit, not a speed setting: one unit is roughly 1,000 tokens per minute, and raising it does not make responses arrive sooner. Each model has its own quota pool per subscription and region, often 10,000 units in total, so a deployment that claims most of the pool blocks every other environment in that subscription. The 100 units above is comfortable for one learner working through all six modules; raise it only if you actually see HTTP 429 responses.
+
 ### Changing Azure Regions
 
 To deploy Microsoft Foundry in a different model region, edit `infra/main.bicep`:
 
 ```bicep
-param openAiLocation string = 'eastus2'  // or other GPT-5.2 region
+param openAiLocation string = 'eastus2'  // or other gpt-5.6-luna region
 ```
 
 The `azd` location prompt controls the resource group location; `openAiLocation` controls where the Foundry resource and model deployments are created.
 
-Check GPT-5.2 availability: https://learn.microsoft.com/azure/ai-services/openai/concepts/models#model-summary-table-and-region-availability
+Check gpt-5.6-luna availability: https://learn.microsoft.com/azure/ai-services/openai/concepts/models#model-summary-table-and-region-availability
 
 ## Updating Infrastructure
 
@@ -230,7 +231,7 @@ For production:
 
 ### Cost Estimation
 - Microsoft Foundry: Pay-per-token (input + output)
-- GPT-5.2: ~$3-5 per 1M tokens (check current pricing)
+- gpt-5.6-luna: ~$3-5 per 1M tokens (check current pricing)
 - text-embedding-3-small: ~$0.02 per 1M tokens
 
 Pricing calculator: https://azure.microsoft.com/pricing/calculator/
@@ -278,8 +279,7 @@ The subdomain name generated from your subscription/environment is already in us
    - Go to Azure Portal → Create a resource → Microsoft Foundry
    - Choose a unique name for your resource
    - Deploy the following models:
-     - **GPT-5.2**
-     - **gpt-5.6-luna** (used by modules 01, 03, 04, 05, 06 for fast, low-latency chat)
+     - **gpt-5.6-luna** (used by every module for chat)
      - **text-embedding-3-small** (for RAG modules)
    - **Important:** Note your deployment names - they must match `.env` configuration
    - After deployment, get your endpoint and API key from "Keys and Endpoint"
@@ -289,20 +289,20 @@ The subdomain name generated from your subscription/environment is already in us
      ```bash
      AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com
      AZURE_OPENAI_API_KEY=your-api-key-here
-     AZURE_OPENAI_DEPLOYMENT=gpt-5.2
+     AZURE_OPENAI_DEPLOYMENT=gpt-5.6-luna
      AZURE_OPENAI_FAST_DEPLOYMENT=gpt-5.6-luna
      AZURE_OPENAI_EMBEDDING_DEPLOYMENT=text-embedding-3-small
      ```
 
 **Model Deployment Naming Guidelines:**
-- Use simple, consistent names: `gpt-5.2`, `gpt-5.6-luna`, `text-embedding-3-small`
+- Use simple, consistent names: `gpt-5.6-luna`, `text-embedding-3-small`
 - Deployment names must match exactly what you configure in `.env`
 - Common mistake: Creating model with one name but referencing different name in code
 
-### Issue: GPT-5.2 not available in selected region
+### Issue: gpt-5.6-luna not available in selected region
 
 **Solution:**
-- Choose a region with GPT-5.2 access (e.g., eastus2)
+- Choose a region with gpt-5.6-luna access (e.g., eastus2)
 - Check availability: https://learn.microsoft.com/azure/ai-services/openai/concepts/models
 
 ### Issue: Insufficient quota for deployment
@@ -310,6 +310,36 @@ The subdomain name generated from your subscription/environment is already in us
 **Solution:**
 1. Request quota increase in Azure Portal
 2. Or reduce the affected deployment capacity in `main.bicep`
+
+### Issue: A model you removed from `main.bicep` is still deployed
+
+Bicep deployments are incremental, so deleting a deployment from `main.bicep` does not
+delete it from Azure. If you ran an earlier version of this workshop you may still have
+chat deployments such as `gpt-5.2` sitting in your resource, quietly holding quota.
+
+**Solution:** list what is actually deployed and remove what you no longer use.
+
+**Bash:**
+```bash
+az cognitiveservices account deployment list \
+  --name <your-foundry-resource> --resource-group <your-rg> \
+  --query "[].{name:name, model:properties.model.name, capacity:sku.capacity}" -o table
+
+az cognitiveservices account deployment delete \
+  --name <your-foundry-resource> --resource-group <your-rg> --deployment-name gpt-5.2
+```
+
+**PowerShell:**
+```powershell
+az cognitiveservices account deployment list `
+  --name <your-foundry-resource> --resource-group <your-rg> `
+  --query "[].{name:name, model:properties.model.name, capacity:sku.capacity}" -o table
+
+az cognitiveservices account deployment delete `
+  --name <your-foundry-resource> --resource-group <your-rg> --deployment-name gpt-5.2
+```
+
+Deleting a deployment does not delete the Foundry resource or your `.env`.
 
 ### Issue: "Resource not found" when running locally
 
@@ -428,7 +458,7 @@ infra/
 
 ## Summary
 
-This infrastructure deploys a single Microsoft Foundry resource — with `gpt-5.2`, `gpt-5.6-luna`, and `text-embedding-3-small` deployments — using Bicep and the Azure Developer CLI (`azd`). Running `azd up` from the `01-introduction` directory provisions the resource and writes a root `.env` file that every module reads, so all Spring Boot apps run locally against the same shared backend. Use the configuration, cost, monitoring, and troubleshooting sections above to customize regions and capacity, control spend, and diagnose common deployment issues. When you're finished, `azd down` removes everything.
+This infrastructure deploys a single Microsoft Foundry resource — with `gpt-5.6-luna` and `text-embedding-3-small` deployments — using Bicep and the Azure Developer CLI (`azd`). Running `azd up` from the `01-introduction` directory provisions the resource and writes a root `.env` file that every module reads, so all Spring Boot apps run locally against the same shared backend. Use the configuration, cost, monitoring, and troubleshooting sections above to customize regions and capacity, control spend, and diagnose common deployment issues. When you're finished, `azd down` removes everything.
 
 ---
 

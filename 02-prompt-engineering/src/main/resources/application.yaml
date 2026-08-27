@@ -17,8 +17,13 @@ spring:
       base-url: ${AZURE_OPENAI_ENDPOINT}
       api-key: ${AZURE_OPENAI_API_KEY}
       microsoft-deployment-name: ${AZURE_OPENAI_DEPLOYMENT}
+      # Spring AI ignores its own timeout properties here (verified: a 19s call still
+      # succeeded with timeout set to 10s) and holds the SDK at 60s. Retries DO apply,
+      # so keep them at 1 rather than burning 4 x 60s on a slow prompt.
+      max-retries: 1
       chat:
         model: ${AZURE_OPENAI_DEPLOYMENT}
+        max-retries: 1
 
 # Spring Boot Actuator
 management:

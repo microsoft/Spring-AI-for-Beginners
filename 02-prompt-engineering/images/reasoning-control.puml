@@ -1,0 +1,43 @@
+@startuml reasoning-control
+' Rendered with: java -jar tools/plantuml.jar -tpng 02-prompt-engineering/images/reasoning-control.puml
+' Output name comes from the @startuml id, not the filename.
+
+skinparam backgroundColor #FFFFFF
+skinparam defaultFontName "Segoe UI"
+skinparam defaultFontSize 13
+skinparam shadowing false
+skinparam roundCorner 12
+skinparam ArrowColor #6E7781
+skinparam TitleFontSize 20
+skinparam TitleFontColor #24292F
+skinparam RectangleBorderThickness 2
+skinparam RectangleFontColor #24292F
+skinparam NoteBackgroundColor #F6F8FA
+skinparam NoteBorderColor #D0D7DE
+skinparam NoteFontColor #57606A
+skinparam NoteFontSize 12
+
+title Reasoning Control — one model, four thinking budgets
+
+rectangle "== reasoning.effort\n<size:11>Responses API parameter, set per request</size>" as PARAM #EAEEF2
+
+rectangle "== none\nAnswers directly.\nNo thinking step.\n\n<size:12>first token ~1.2s</size>" as NONE #E6F4EA
+rectangle "== low\nBrief reasoning,\nthen answers.\n\n<size:12>first token ~2.4s</size>" as LOW #DDF4E4
+rectangle "== medium\nExplores options\nand trade-offs.\n\n<size:12>first token ~4.6s</size>" as MED #FFF8C5
+rectangle "== high\nDeep exploration\nbefore replying.\n\n<size:12>first token ~46s</size>" as HIGH #FFEBE9
+
+PARAM --> NONE
+PARAM --> LOW
+PARAM --> MED
+PARAM --> HIGH
+
+note bottom of NONE : Used by the\n**low eagerness** demo
+note bottom of MED : Used by the\n**high eagerness** demo
+note bottom of HIGH : Too slow for a live demo —\nthe screen stays blank
+
+legend bottom
+  <size:12>Same ""gpt-5.6-luna"" deployment in every case — only the thinking budget changes.</size>
+  <size:11>Times are to the first visible token, measured against this module's endpoints.</size>
+endlegend
+
+@enduml

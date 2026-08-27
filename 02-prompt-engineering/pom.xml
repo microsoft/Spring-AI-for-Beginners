@@ -37,6 +37,12 @@
       <artifactId>spring-ai-starter-model-openai</artifactId>
     </dependency>
 
+    <!-- Provides OpenAIOkHttpClientAsync, needed to reach Azure's /openai/v1 Responses API -->
+    <dependency>
+      <groupId>com.openai</groupId>
+      <artifactId>openai-java-client-okhttp</artifactId>
+    </dependency>
+
     <!-- WebFlux for Flux streaming support in Spring MVC -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
