@@ -1,9 +1,13 @@
 package com.example.springai.prompts.service;
 
 import com.openai.client.OpenAIClientAsync;
+import com.openai.core.http.AsyncStreamResponse;
 import com.openai.models.Reasoning;
 import com.openai.models.ReasoningEffort;
+import com.openai.models.responses.Response;
 import com.openai.models.responses.ResponseCreateParams;
+import com.openai.models.responses.ResponseError;
+import com.openai.models.responses.ResponseStreamEvent;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.chat.memory.MessageWindowChatMemory;
@@ -18,6 +22,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
+import reactor.core.publisher.FluxSink;
 
 import java.util.List;
 import java.util.Set;
@@ -97,15 +102,27 @@ public class Gpt5PromptService {
                 .build();
 
         return Flux.create(sink -> {
-            openAIClientAsync.responses().createStreaming(params)
-                    .subscribe(event -> {
+            AsyncStreamResponse<ResponseStreamEvent> stream =
+                    openAIClientAsync.responses().createStreaming(params);
+
+            // Cancelling the Flux (browser navigated away) must also close the HTTP stream,
+            // otherwise generation runs on unwatched for up to the client timeout.
+            sink.onDispose(stream::close);
+
+            stream.subscribe(event -> {
                         try {
-                            event.outputTextDelta().ifPresent(delta -> {
-                                String text = delta.delta();
-                                if (!text.isEmpty()) {
-                                    sink.next(text);
-                                }
-                            });
+                            event.outputTextDelta().ifPresent(delta -> emit(sink, delta.delta()));
+                            // A refusal is the model's answer, not a transport failure: show it
+                            // instead of completing with a blank response.
+                            event.refusalDelta().ifPresent(delta -> emit(sink, delta.delta()));
+                            event.error().ifPresent(err -> sink.error(
+                                    new IllegalStateException("Responses API error: " + err.message())));
+                            event.failed().ifPresent(failed -> sink.error(
+                                    new IllegalStateException("Response failed: " + describe(failed.response()))));
+                            // Truncation still leaves usable text already streamed to the client,
+                            // so it is logged rather than turned into an error that would hide it.
+                            event.incomplete().ifPresent(inc -> log.warn(
+                                    "[STREAM] Response incomplete: {}", inc.response().incompleteDetails()));
                         } catch (Exception e) {
                             sink.error(e);
                         }
@@ -119,6 +136,16 @@ public class Gpt5PromptService {
                         }
                     });
         });
+    }
+
+    private static void emit(FluxSink<String> sink, String text) {
+        if (!text.isEmpty()) {
+            sink.next(text);
+        }
+    }
+
+    private static String describe(Response response) {
+        return response.error().map(ResponseError::message).orElse("no error detail provided");
     }
 
     /**

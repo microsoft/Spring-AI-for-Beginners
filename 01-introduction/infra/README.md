@@ -152,7 +152,7 @@ param openAiDeployments array = [
     }
     sku: {
       name: 'GlobalStandard'
-      capacity: 9990
+      capacity: 100
     }
   }
   {
@@ -172,6 +172,8 @@ param openAiDeployments array = [
 ```
 
 Available models and versions: https://learn.microsoft.com/azure/ai-services/openai/concepts/models
+
+`capacity` is a rate limit, not a speed setting: one unit is roughly 1,000 tokens per minute, and raising it does not make responses arrive sooner. Each model has its own quota pool per subscription and region, often 10,000 units in total, so a deployment that claims most of the pool blocks every other environment in that subscription. The 100 units above is comfortable for one learner working through all six modules; raise it only if you actually see HTTP 429 responses.
 
 ### Changing Azure Regions
 
@@ -308,6 +310,36 @@ The subdomain name generated from your subscription/environment is already in us
 **Solution:**
 1. Request quota increase in Azure Portal
 2. Or reduce the affected deployment capacity in `main.bicep`
+
+### Issue: A model you removed from `main.bicep` is still deployed
+
+Bicep deployments are incremental, so deleting a deployment from `main.bicep` does not
+delete it from Azure. If you ran an earlier version of this workshop you may still have
+chat deployments such as `gpt-5.2` sitting in your resource, quietly holding quota.
+
+**Solution:** list what is actually deployed and remove what you no longer use.
+
+**Bash:**
+```bash
+az cognitiveservices account deployment list \
+  --name <your-foundry-resource> --resource-group <your-rg> \
+  --query "[].{name:name, model:properties.model.name, capacity:sku.capacity}" -o table
+
+az cognitiveservices account deployment delete \
+  --name <your-foundry-resource> --resource-group <your-rg> --deployment-name gpt-5.2
+```
+
+**PowerShell:**
+```powershell
+az cognitiveservices account deployment list `
+  --name <your-foundry-resource> --resource-group <your-rg> `
+  --query "[].{name:name, model:properties.model.name, capacity:sku.capacity}" -o table
+
+az cognitiveservices account deployment delete `
+  --name <your-foundry-resource> --resource-group <your-rg> --deployment-name gpt-5.2
+```
+
+Deleting a deployment does not delete the Foundry resource or your `.env`.
 
 ### Issue: "Resource not found" when running locally
 

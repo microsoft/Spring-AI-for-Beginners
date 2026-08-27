@@ -26,8 +26,11 @@ param openAiDeployments array = [
       version: '2026-07-09'
     }
     sku: {
+      // Capacity is a rate limit (1 unit = 1,000 TPM), not a speed setting, and the
+      // per-model quota for this SKU is commonly 10,000 units for a whole subscription.
+      // 100 units is ample for one learner and leaves room for other environments.
       name: 'GlobalStandard'
-      capacity: 9990
+      capacity: 100
     }
   }
   {

@@ -59,7 +59,7 @@ Before diving into conversations, it's important to understand tokens - the basi
 
 *Example of how text is broken into tokens - "I love AI!" becomes 4 separate processing units*
 
-Tokens are how AI models measure and process text. Words, punctuation, and even spaces can be tokens. Your model has a limit of how many tokens it can process at once (400,000 for gpt-5.6-luna, with up to 272,000 input tokens and 128,000 output tokens). Understanding tokens helps you manage conversation length and costs.
+Tokens are how AI models measure and process text. Words, punctuation, and even spaces can be tokens. Every model has a **context window** — the most tokens it can consider in one call, counting your input and its output together. For `gpt-5.6-luna` that window is hundreds of thousands of tokens, so you are unlikely to reach it in these exercises, but it is finite and it changes as models are revised. Check the [model documentation](https://learn.microsoft.com/azure/ai-services/openai/concepts/models) for the current figure rather than relying on a number memorized from an older model. Understanding tokens helps you manage conversation length and costs.
 
 ## How Memory Works
 
