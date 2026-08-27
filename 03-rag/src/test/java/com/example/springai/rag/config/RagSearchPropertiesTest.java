@@ -19,9 +19,9 @@ class RagSearchPropertiesTest {
             SearchRequest request = properties.buildSearchRequest("What is Spring AI?");
 
             assertThat(properties.maxResults()).isEqualTo(5);
-            assertThat(properties.similarityThreshold()).isEqualTo(0.5);
+            assertThat(properties.similarityThreshold()).isEqualTo(0.35);
             assertThat(request.getTopK()).isEqualTo(5);
-            assertThat(request.getSimilarityThreshold()).isEqualTo(0.5);
+            assertThat(request.getSimilarityThreshold()).isEqualTo(0.35);
             assertThat(request.getQuery()).isEqualTo("What is Spring AI?");
         });
     }

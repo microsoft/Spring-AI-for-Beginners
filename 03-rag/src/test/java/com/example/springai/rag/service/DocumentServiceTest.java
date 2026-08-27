@@ -19,7 +19,7 @@ class DocumentServiceTest {
 
     @BeforeEach
     void setUp() {
-        documentService = new DocumentService();
+        documentService = new DocumentService(DocumentService.DEFAULT_CHUNK_SIZE);
     }
 
     @Test
@@ -77,6 +77,34 @@ class DocumentServiceTest {
         assertNotNull(result);
         assertEquals(filename, result.filename());
         assertTrue(result.segments().size() > 1, "Large document should be split into multiple segments");
+    }
+
+    @Test
+    void testMultiTopicDocumentIsSplitPerTopic() {
+        // Sized to match sample-document.txt (~4.3 KB), which used to embed as a single chunk:
+        // one embedding averaged over every topic drowned out any individual fact, so specific
+        // questions scored below the similarity threshold and retrieval returned nothing.
+        String content = """
+                Chunk Size - Use 300-500 token chunks to keep one topic per embedding.
+                Similarity Threshold - Set a minimum score to filter out irrelevant chunks.
+                Context Window - Limit the number of chunks included in each request.
+                Vector Stores - SimpleVectorStore keeps embeddings in memory for demos.
+                Embeddings - Text is converted to vectors that capture semantic meaning.
+                Retrieval - The question is embedded and compared against stored chunks.
+                """.repeat(9);
+        InputStream inputStream = new ByteArrayInputStream(content.getBytes(StandardCharsets.UTF_8));
+
+        DocumentService.ProcessedDocument result =
+                documentService.processDocument(inputStream, "topics.txt");
+
+        assertTrue(result.segments().size() > 1,
+                "A multi-topic document must produce more than one chunk, but produced "
+                        + result.segments().size());
+    }
+
+    @Test
+    void testRejectsInvalidChunkSize() {
+        assertThrows(IllegalArgumentException.class, () -> new DocumentService(0));
     }
 
     @Test

@@ -6,6 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.ai.document.Document;
 import org.springframework.ai.transformer.splitter.TokenTextSplitter;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.io.BufferedReader;
@@ -42,11 +43,20 @@ import java.util.stream.Collectors;
 public class DocumentService {
 
     private static final Logger log = LoggerFactory.getLogger(DocumentService.class);
-    
+
+    public static final int DEFAULT_CHUNK_SIZE = 150;
+
     private final TokenTextSplitter splitter;
 
-    public DocumentService() {
-        this.splitter = TokenTextSplitter.builder().build();
+    public DocumentService(
+            @Value("${app.rag.chunking.chunk-size:" + DEFAULT_CHUNK_SIZE + "}") int chunkSize) {
+        if (chunkSize < 1) {
+            throw new IllegalArgumentException("RAG chunk size must be at least 1 token");
+        }
+        // Spring AI's 800-token default swallows a small document whole, and one embedding
+        // averaged over every topic scores below the similarity threshold for specific questions.
+        this.splitter = TokenTextSplitter.builder().withChunkSize(chunkSize).build();
+        log.info("Document splitter configured with chunk size {} tokens", chunkSize);
     }
 
     /**

@@ -21,9 +21,17 @@ server:
 
 app:
   rag:
+    chunking:
+      # Tokens per chunk. Small chunks keep one topic per embedding: measured against
+      # sample-document.txt, a specific question scores 0.29 at 300 tokens but 0.41 at 150,
+      # because a larger chunk averages the relevant sentence away.
+      chunk-size: 150
     search:
       max-results: 5
-      similarity-threshold: 0.5
+      # text-embedding-3-small returns a compressed score range. On this corpus a correct
+      # match scores ~0.41 while unrelated chunks sit at 0.14-0.21, so 0.35 separates them;
+      # the previous 0.5 rejected every correct match for specific questions.
+      similarity-threshold: 0.35
 
 # Spring Boot Actuator
 management:

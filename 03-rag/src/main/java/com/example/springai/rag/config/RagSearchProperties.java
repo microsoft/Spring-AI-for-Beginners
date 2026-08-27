@@ -11,7 +11,7 @@ import org.springframework.stereotype.Component;
 public class RagSearchProperties {
 
     public static final int DEFAULT_MAX_RESULTS = 5;
-    public static final double DEFAULT_SIMILARITY_THRESHOLD = 0.5;
+    public static final double DEFAULT_SIMILARITY_THRESHOLD = 0.35;
 
     private final int maxResults;
     private final double similarityThreshold;
