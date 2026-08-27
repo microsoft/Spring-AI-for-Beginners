@@ -125,7 +125,7 @@ The diagram below shows how this works visually. Notice how each chunk shares so
 
 <img src="images/document-chunking.png" alt="Document Chunking" width="800"/>
 
-*This diagram shows a document being split into 300-token chunks with 30-token overlap, preserving context at chunk boundaries.*
+*This diagram illustrates the general technique of splitting a document into overlapping chunks to preserve context at the boundaries. Spring AI's `TokenTextSplitter`, used in this module, splits purely on token count and does not add overlap.*
 
 > **🤖 Try with [GitHub Copilot](https://github.com/features/copilot) Chat:** Open [`DocumentService.java`](src/main/java/com/example/springai/rag/service/DocumentService.java) and ask:
 > - "How does Spring AI split documents into chunks and why is overlap important?"
@@ -178,7 +178,7 @@ When you ask a question, the `VectorStore` automatically embeds your question an
 SearchRequest searchRequest = SearchRequest.builder()
     .query(request.question())
     .topK(5)
-    .similarityThreshold(0.5)
+    .similarityThreshold(0.35)
     .build();
 
 List<Document> matches = vectorStore.similaritySearch(searchRequest);
@@ -449,7 +449,7 @@ public ChatClient chatClient(OpenAiChatModel chatModel) {
 ```java
 QuestionAnswerAdvisor qaAdvisor = QuestionAnswerAdvisor.builder(vectorStore)
         .searchRequest(SearchRequest.builder()
-                .similarityThreshold(0.5)
+                .similarityThreshold(0.35)
                 .topK(5)
                 .build())
         .build();
@@ -477,7 +477,13 @@ The application exposes both endpoints so you can compare them:
 
 ### Chunking Strategy
 
-Documents are split into 300-token chunks with 30 tokens of overlap. This balance ensures each chunk has enough context to be meaningful while staying small enough to include multiple chunks in a prompt.
+Documents are split into 150-token chunks (`app.rag.chunking.chunk-size`). Spring AI's
+`TokenTextSplitter` splits on token count without overlap, so the size is the only lever here.
+
+Size matters more than it looks. With Spring AI's 800-token default, `sample-document.txt`
+embedded as a **single chunk**, so its one vector averaged every topic in the file: asking about
+chunk size scored 0.29 against it and was filtered out, while the same question scores 0.41
+against 150-token chunks because the relevant sentences are no longer diluted.
 
 ### Similarity Scores
 
@@ -492,7 +498,12 @@ Scores range from 0 to 1:
 - 0.3-0.7: Relevant, good context
 - Below 0.3: Low relevance, may be noise
 
-The default threshold is set to `0.5` so weak matches are filtered out before they reach the prompt. Tune this value for your corpus and vector store: lower it if relevant chunks are being missed, or raise it if unrelated chunks appear in source references.
+The default threshold is `0.35` (`app.rag.search.similarity-threshold`). That number is measured,
+not guessed: on this corpus `text-embedding-3-small` scores a correct match around 0.41 and
+unrelated chunks between 0.14 and 0.21, so 0.35 sits in the gap. The score range an embedding
+model produces is model-specific — a threshold of 0.5 rejected every correct match for specific
+questions here. Tune it for your own corpus: lower it if relevant chunks are being missed, or
+raise it if unrelated chunks appear in source references.
 
 Embeddings work well when meaning clusters cleanly, but they have blind spots. The diagram below shows the common failure modes — chunks that are too large produce muddy vectors, chunks that are too small lack context, ambiguous terms point to multiple clusters, and exact-match lookups (IDs, part numbers) don't work with embeddings at all:
 
