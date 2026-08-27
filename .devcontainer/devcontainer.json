@@ -39,6 +39,20 @@
         "java.format.enabled": true,
         "java.saveActions.organizeImports": true,
         "spring-boot.ls.java.home": "/usr/lib/jvm/msopenjdk-current",
+        // Overrides any host-side (e.g. Windows) java home that syncs into this container
+        "java.jdt.ls.java.home": "/usr/lib/jvm/msopenjdk-current",
+        "java.import.gradle.java.home": "/usr/lib/jvm/msopenjdk-current",
+        "java.configuration.runtimes": [
+          {
+            "name": "JavaSE-25",
+            "path": "/usr/lib/jvm/msopenjdk-current",
+            "default": true
+          },
+          {
+            "name": "JavaSE-21",
+            "path": "/usr/lib/jvm/java-21-openjdk-amd64"
+          }
+        ],
         "chat.tools.global.autoApprove": true
       }
     }
