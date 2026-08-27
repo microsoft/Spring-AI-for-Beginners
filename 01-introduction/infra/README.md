@@ -144,18 +144,6 @@ To change model deployments, edit `infra/main.bicep` and modify the `openAiDeplo
 ```bicep
 param openAiDeployments array = [
   {
-    name: 'gpt-5.6-luna'  // Reasoning model used by Module 02
-    model: {
-      format: 'OpenAI'
-      name: 'gpt-5.6-luna'
-      version: '2025-12-11'
-    }
-    sku: {
-      name: 'GlobalStandard'
-      capacity: 10000
-    }
-  }
-  {
     name: 'gpt-5.6-luna'  // Chat model used by every module
     model: {
       format: 'OpenAI'
@@ -164,7 +152,19 @@ param openAiDeployments array = [
     }
     sku: {
       name: 'GlobalStandard'
-      capacity: 9000
+      capacity: 9990
+    }
+  }
+  {
+    name: 'text-embedding-3-small'  // Embedding model used by Module 03
+    model: {
+      format: 'OpenAI'
+      name: 'text-embedding-3-small'
+      version: '1'
+    }
+    sku: {
+      name: 'Standard'
+      capacity: 20
     }
   }
   // Add more deployments...
@@ -277,7 +277,6 @@ The subdomain name generated from your subscription/environment is already in us
    - Go to Azure Portal → Create a resource → Microsoft Foundry
    - Choose a unique name for your resource
    - Deploy the following models:
-     - **gpt-5.6-luna**
      - **gpt-5.6-luna** (used by every module for chat)
      - **text-embedding-3-small** (for RAG modules)
    - **Important:** Note your deployment names - they must match `.env` configuration

@@ -272,8 +272,19 @@ function renderMarkdown(src) {
     const out = [];
     let i = 0;
 
+    // Allowlist rather than blocking javascript:, so odd encodings fall through to plain text.
+    function safeUrl(u) {
+        const t = String(u).trim();
+        if (/^(?:https?:\/\/|mailto:)[^\s]+$/i.test(t)) return t;  // absolute, non-executable
+        if (/^[#\/][^\s]*$/.test(t)) return t;                     // anchor or root-relative
+        if (/^[\w.-]+(?:\/[^\s]*)?$/.test(t)) return t;            // plain relative path
+        return null;                                               // anything else: render as text
+    }
+
     function htmlEscape(s) {
-        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+        // Quotes matter too: the fence language is interpolated into a class="" attribute.
+        return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+                .replace(/"/g, '&quot;').replace(/'/g, '&#39;');
     }
 
     function inline(s) {
@@ -287,7 +298,12 @@ function renderMarkdown(src) {
         s = s.replace(/__([^_\n]+)__/g, '<strong>$1</strong>');
         s = s.replace(/(^|[^*\w])\*([^*\n]+?)\*(?![*\w])/g, '$1<em>$2</em>');
         s = s.replace(/(^|[^_\w])_([^_\n]+?)_(?![_\w])/g, '$1<em>$2</em>');
-        s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer">$1</a>');
+        s = s.replace(/\[([^\]]+)\]\(([^)\s]+)\)/g, function (_m, text, url) {
+            const safe = safeUrl(url);
+            return safe === null
+                ? text
+                : '<a href="' + safe + '" target="_blank" rel="noopener noreferrer">' + text + '</a>';
+        });
         s = s.replace(/\u0000C(\d+)\u0000/g, function (_m, idx) {
             return '<code>' + codeStash[parseInt(idx, 10)] + '</code>';
         });

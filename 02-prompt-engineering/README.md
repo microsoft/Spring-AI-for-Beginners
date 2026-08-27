@@ -431,9 +431,11 @@ The following diagram shows how constraints guide the model to produce output th
 
 ## How This Uses Spring AI
 
-This module uses the same Spring AI dependency introduced in [Module 01](../01-introduction/README.md#how-this-uses-spring-ai) — `spring-ai-starter-model-openai` — which auto-configures `OpenAiChatModel` and a `ChatClient.Builder` for Microsoft Foundry. The service code in this module injects `ChatClient` and uses its fluent API for every call. No additional Spring AI dependencies are needed.
+This module builds on the Spring AI dependency introduced in [Module 01](../01-introduction/README.md#how-this-uses-spring-ai) — `spring-ai-starter-model-openai` — which auto-configures `OpenAiChatModel` and a `ChatClient.Builder` for Microsoft Foundry. The short demos inject `ChatClient` and use its fluent API.
 
-The `application.yaml` configuration is identical to Module 01 — both point at the same `gpt-5.6-luna` deployment ([application.yaml](src/main/resources/application.yaml)):
+Two things are different here. First, this module adds `openai-java-client-okhttp` so it can talk to the **Responses API**, which is where `reasoning.effort` actually takes effect and where streaming starts emitting text in seconds rather than after the model has finished thinking. Second, Spring AI's own client is pinned to a 60s timeout that its timeout properties don't override, so the two demos whose prompts run longer than that (`autonomous` and `reason`) collect the Responses stream instead of calling `chatClient`.
+
+The `application.yaml` points at the same `gpt-5.6-luna` deployment as Module 01, and lowers the retry count so a slow prompt fails once rather than four times ([application.yaml](src/main/resources/application.yaml)):
 
 ```yaml
 spring:
@@ -442,11 +444,13 @@ spring:
       base-url: ${AZURE_OPENAI_ENDPOINT}
       api-key: ${AZURE_OPENAI_API_KEY}
       microsoft-deployment-name: ${AZURE_OPENAI_DEPLOYMENT}
+      max-retries: 1
       chat:
         model: ${AZURE_OPENAI_DEPLOYMENT}
+        max-retries: 1
 ```
 
-Beyond that deployment swap, the difference in this module is how the prompts are constructed — the rest of the model configuration stays the same.
+The streaming client itself is built in [SpringAiConfig](src/main/java/com/example/springai/prompts/config/SpringAiConfig.java) and points at Azure's OpenAI-compatible `/openai/v1` surface, because the Responses API is not deployment-scoped the way Chat Completions is.
 
 The diagram below shows the Spring AI components involved in prompt engineering — `PromptTemplate` resolves variables into a `Prompt`, `ChatClient` sends it to the model via `ChatModel`, and you get a structured response back.
 
