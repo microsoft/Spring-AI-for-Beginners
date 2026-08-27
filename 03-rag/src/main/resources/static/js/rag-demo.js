@@ -166,7 +166,8 @@ async function askQuestion(question) {
 // Display Answer
 function displayAnswer(result) {
     answerSection.style.display = 'block';
-    answerText.textContent = result.answer;
+    answerText.classList.add('markdown-body');
+    answerText.innerHTML = renderMarkdown(result.answer);
 
     if (result.sources && result.sources.length > 0) {
         sourcesSection.style.display = 'block';

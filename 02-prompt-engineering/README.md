@@ -608,7 +608,7 @@ Ask "What is Spring Boot?" then immediately follow up with "Show me an example".
 
 <img src="images/multi-turn-chat-demo.png" alt="Multi-Turn Chat demo" width="800"/>
 
-*Follow-up “Show me an example” is answered with a Spring Boot sample — context from the previous turn was preserved*
+*Follow-up “Show me a minimal example” never mentions Spring Boot — the answer still does, because context from the previous turn was preserved*
 
 ### Step-by-Step Reasoning
 
@@ -616,7 +616,7 @@ Pick a math problem and try it with both Step-by-Step Reasoning and Low Eagernes
 
 <img src="images/step-by-step-reasoning-demo.png" alt="Step-by-Step Reasoning demo" width="800"/>
 
-*Each calculation shown explicitly — distances, times, and the final average speed*
+*Understanding, approach, then each step laid out explicitly before the conclusion*
 
 ### Constrained Output
 

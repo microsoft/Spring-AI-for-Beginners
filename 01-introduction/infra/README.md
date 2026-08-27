@@ -96,7 +96,7 @@ This displays:
 - `AZURE_OPENAI_ENDPOINT`: Your Microsoft Foundry endpoint URL
 - `AZURE_OPENAI_KEY`: API key returned by `azd`; the post-provision scripts write this to `AZURE_OPENAI_API_KEY` in `.env` for local apps
 - `AZURE_OPENAI_DEPLOYMENT`: Reasoning chat model name (gpt-5.6-luna) — used by Module 02
-- `AZURE_OPENAI_FAST_DEPLOYMENT`: Fast chat model name (gpt-5.6-luna) — used by all other modules
+- `AZURE_OPENAI_FAST_DEPLOYMENT`: Chat model name (gpt-5.6-luna) — same deployment, kept as a separate variable
 - `AZURE_OPENAI_EMBEDDING_DEPLOYMENT`: Embedding model name
 
 ### 3. Run Applications Locally
@@ -156,7 +156,7 @@ param openAiDeployments array = [
     }
   }
   {
-    name: 'gpt-5.6-luna'  // Fast, low-latency model used by all other modules
+    name: 'gpt-5.6-luna'  // Chat model used by every module
     model: {
       format: 'OpenAI'
       name: 'gpt-5.6-luna'
@@ -278,7 +278,7 @@ The subdomain name generated from your subscription/environment is already in us
    - Choose a unique name for your resource
    - Deploy the following models:
      - **gpt-5.6-luna**
-     - **gpt-5.6-luna** (used by modules 01, 03, 04, 05, 06 for fast, low-latency chat)
+     - **gpt-5.6-luna** (used by every module for chat)
      - **text-embedding-3-small** (for RAG modules)
    - **Important:** Note your deployment names - they must match `.env` configuration
    - After deployment, get your endpoint and API key from "Keys and Endpoint"

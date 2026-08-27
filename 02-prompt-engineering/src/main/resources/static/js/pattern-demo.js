@@ -307,9 +307,15 @@ function renderMarkdown(src) {
         return l.replace(/^\s*\|/, '').replace(/\|\s*$/, '').split('|').map(function (c) { return c.trim(); });
     }
 
-    function blockBoundary(l) {
+    function isTableStart(idx) {
+        return idx + 1 < lines.length && lines[idx].indexOf('|') >= 0 && isTableSep(lines[idx + 1]);
+    }
+
+    function blockBoundary(idx) {
+        // Needs the index, not the line, so a table start can be spotted via its separator row.
+        const l = lines[idx];
         return isBlank(l) || isHeading(l) || isHr(l) || isFence(l) ||
-               isUlItem(l) || isOlItem(l) || isQuote(l);
+               isUlItem(l) || isOlItem(l) || isQuote(l) || isTableStart(idx);
     }
 
     while (i < lines.length) {
@@ -340,7 +346,7 @@ function renderMarkdown(src) {
             i++; continue;
         }
 
-        if (line.indexOf('|') >= 0 && i + 1 < lines.length && isTableSep(lines[i + 1])) {
+        if (isTableStart(i)) {
             const header = splitRow(line);
             i += 2;
             const rows = [];
@@ -364,7 +370,7 @@ function renderMarkdown(src) {
             while (i < lines.length && isUlItem(lines[i])) {
                 let item = lines[i].replace(/^\s*[-*+]\s+/, '');
                 i++;
-                while (i < lines.length && !blockBoundary(lines[i])) {
+                while (i < lines.length && !blockBoundary(i)) {
                     item += ' ' + lines[i].trim(); i++;
                 }
                 items.push('<li>' + inline(item) + '</li>');
@@ -378,7 +384,7 @@ function renderMarkdown(src) {
             while (i < lines.length && isOlItem(lines[i])) {
                 let item = lines[i].replace(/^\s*\d+\.\s+/, '');
                 i++;
-                while (i < lines.length && !blockBoundary(lines[i])) {
+                while (i < lines.length && !blockBoundary(i)) {
                     item += ' ' + lines[i].trim(); i++;
                 }
                 items.push('<li>' + inline(item) + '</li>');
@@ -398,7 +404,7 @@ function renderMarkdown(src) {
 
         const para = [line];
         i++;
-        while (i < lines.length && !blockBoundary(lines[i])) {
+        while (i < lines.length && !blockBoundary(i)) {
             para.push(lines[i]); i++;
         }
         out.push('<p>' + inline(para.join(' ')) + '</p>');

@@ -149,7 +149,7 @@ function addAgentMessage(answer, toolExecutions) {
     messageDiv.innerHTML = `
         <div class="message-icon">🤖</div>
         <div class="message-bubble">
-            <div class="message-content">${escapeHtml(answer)}</div>
+            <div class="message-content markdown-body">${renderMarkdown(answer)}</div>
             ${toolsHtml}
         </div>
     `;
