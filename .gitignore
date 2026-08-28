@@ -90,7 +90,7 @@ DOTENV_MIGRATION_PLAN.md
 .playwright-mcp/
 
 # MCP Servers (users add locally from https://github.com/modelcontextprotocol/servers)
-servers/
+/servers/
 
 IMAGE_GENERATION_GUIDE.md
 githubcopilot.md
@@ -108,5 +108,6 @@ regen-tool-seq.py
 regen-boot-seq.py
 render-puml.py
 .env copy
-tools/
+# Anchored: an unanchored "tools/" also matched 04-tools' com/example/springai/tools package.
+/tools/
 .devcontainer/devcontainer-lock.json

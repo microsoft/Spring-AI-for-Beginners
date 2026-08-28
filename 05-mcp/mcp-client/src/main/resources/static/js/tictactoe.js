@@ -80,7 +80,7 @@ async function newGame() {
         const data = await response.json();
 
         if (data.error) {
-            updateStatus('Error: ' + data.error, '');
+            updateStatus('Error: ' + escapeHtml(data.error), '');
             return;
         }
 
@@ -119,7 +119,7 @@ async function makeMove(position) {
         const data = await response.json();
 
         if (data.error) {
-            updateStatus('Error: ' + data.error, '');
+            updateStatus('Error: ' + escapeHtml(data.error), '');
             // Revert optimistic update
             cell.textContent = '';
             cell.classList.remove('x', 'occupied', 'new-move');
@@ -131,7 +131,7 @@ async function makeMove(position) {
         renderBoard(data.board, data.winningCells || []);
         handleGameEnd(data);
     } catch (error) {
-        updateStatus('Connection error: ' + error.message, '');
+        updateStatus('Connection error: ' + escapeHtml(error.message), '');
         gameActive = true;
         enableBoard();
     }
@@ -193,6 +193,13 @@ function handleGameEnd(data) {
 }
 
 // --- UI Updates ---
+
+// Callers pass small trusted HTML fragments; escape any dynamic text before calling.
+function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value == null ? '' : String(value);
+    return div.innerHTML;
+}
 
 function updateStatus(message, statusClass) {
     const statusEl = document.getElementById('gameStatus');

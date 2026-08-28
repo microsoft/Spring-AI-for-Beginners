@@ -13,6 +13,8 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.InputStream;
+import java.util.Locale;
+import java.util.Set;
 
 /**
  * REST controller for document upload and management.
@@ -28,6 +30,8 @@ import java.io.InputStream;
 public class DocumentController {
 
     private static final Logger log = LoggerFactory.getLogger(DocumentController.class);
+
+    private static final Set<String> ALLOWED_EXTENSIONS = Set.of(".pdf", ".txt");
 
     private final DocumentService documentService;
     private final EmbeddingService embeddingService;
@@ -60,6 +64,13 @@ public class DocumentController {
             if (filename == null) {
                 return ResponseEntity.badRequest()
                     .body(new ErrorResponse("Invalid file", "Filename is missing"));
+            }
+
+            // The browser also checks this, but the endpoint must not trust the browser.
+            String lower = filename.toLowerCase(Locale.ROOT);
+            if (ALLOWED_EXTENSIONS.stream().noneMatch(lower::endsWith)) {
+                return ResponseEntity.badRequest()
+                    .body(new ErrorResponse("Invalid file", "Only PDF and TXT files are supported"));
             }
 
             // Process document

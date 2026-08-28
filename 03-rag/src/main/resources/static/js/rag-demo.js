@@ -171,10 +171,11 @@ function displayAnswer(result) {
 
     if (result.sources && result.sources.length > 0) {
         sourcesSection.style.display = 'block';
+        // filename and excerpt are attacker-controlled (upload name / document body) — never interpolate raw.
         sourcesList.innerHTML = result.sources.map((source, index) => `
             <div class="source-item">
-                <p><strong>Source ${index + 1}: ${source.filename}</strong></p>
-                <p class="source-content">"${source.excerpt}"</p>
+                <p><strong>Source ${index + 1}: ${escapeHtml(source.filename)}</strong></p>
+                <p class="source-content">"${escapeHtml(source.excerpt)}"</p>
                 <p class="source-meta">Relevance: ${(source.relevanceScore * 100).toFixed(1)}%</p>
             </div>
         `).join('');
@@ -184,6 +185,12 @@ function displayAnswer(result) {
 
     // Scroll to answer
     answerSection.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function escapeHtml(value) {
+    const div = document.createElement('div');
+    div.textContent = value == null ? '' : String(value);
+    return div.innerHTML;
 }
 
 // Show Status Message
