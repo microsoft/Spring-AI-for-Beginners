@@ -12,34 +12,10 @@
   <name>03-rag</name>
 
   <dependencies>
-    <!-- Spring MVC for REST endpoints -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-web</artifactId>
-    </dependency>
-
-    <!-- Spring Boot Actuator for health checks and monitoring -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-actuator</artifactId>
-    </dependency>
-
     <!-- Thymeleaf for web UI -->
     <dependency>
       <groupId>org.springframework.boot</groupId>
       <artifactId>spring-boot-starter-thymeleaf</artifactId>
-    </dependency>
-
-    <!-- Spring AI OpenAI SDK Starter (auto-configures OpenAiChatModel) -->
-    <dependency>
-      <groupId>org.springframework.ai</groupId>
-      <artifactId>spring-ai-starter-model-openai</artifactId>
-    </dependency>
-
-    <!-- Spring AI ChatClient for fluent API and advisor support -->
-    <dependency>
-      <groupId>org.springframework.ai</groupId>
-      <artifactId>spring-ai-client-chat</artifactId>
     </dependency>
 
     <!-- Spring AI Advisors for QuestionAnswerAdvisor (RAG via Advisor API) -->
@@ -59,19 +35,6 @@
       <groupId>org.apache.pdfbox</groupId>
       <artifactId>pdfbox</artifactId>
     </dependency>
-
-    <!-- JSON binding -->
-    <dependency>
-      <groupId>com.fasterxml.jackson.core</groupId>
-      <artifactId>jackson-databind</artifactId>
-    </dependency>
-
-    <!-- Testing support -->
-    <dependency>
-      <groupId>org.springframework.boot</groupId>
-      <artifactId>spring-boot-starter-test</artifactId>
-      <scope>test</scope>
-    </dependency>
     
     <!-- WebMvc test support for @WebMvcTest (Spring Boot 4.0) -->
     <dependency>
@@ -89,13 +52,6 @@
         <configuration>
           <mainClass>com.example.springai.rag.RagApplication</mainClass>
         </configuration>
-        <executions>
-          <execution>
-            <goals>
-              <goal>repackage</goal>
-            </goals>
-          </execution>
-        </executions>
       </plugin>
     </plugins>
   </build>

@@ -23,12 +23,6 @@
          JAVA_HOME environment variable or the `java.version` property -->
     <java.version>25</java.version>
     <spring.boot.version>4.0.6</spring.boot.version>
-    <!-- Test dependency versions - JUnit version managed by Spring Boot BOM -->
-    <assertj.version>3.27.7</assertj.version>
-    <testcontainers.version>2.0.2</testcontainers.version>
-    <!-- Logging versions -->
-    <slf4j.version>2.0.17</slf4j.version>
-    <logback.version>1.5.32</logback.version>
     <!-- Other dependency versions -->
     <pdfbox.version>2.0.31</pdfbox.version>
     <!-- Spring AI version -->
@@ -69,44 +63,6 @@
         <artifactId>openai-java-client-okhttp</artifactId>
         <version>${openai.java.version}</version>
       </dependency>
-      
-      <!-- Testing dependencies - JUnit managed by Spring Boot BOM -->
-      <dependency>
-        <groupId>org.assertj</groupId>
-        <artifactId>assertj-core</artifactId>
-        <version>${assertj.version}</version>
-        <scope>test</scope>
-      </dependency>      <dependency>
-        <groupId>org.testcontainers</groupId>
-        <artifactId>testcontainers</artifactId>
-        <version>${testcontainers.version}</version>
-        <scope>test</scope>
-      </dependency>
-      <dependency>
-        <groupId>org.testcontainers</groupId>
-        <artifactId>testcontainers-junit-jupiter</artifactId>
-        <version>${testcontainers.version}</version>
-        <scope>test</scope>
-      </dependency>
-      
-      <!-- Logging dependencies -->
-      <dependency>
-        <groupId>org.slf4j</groupId>
-        <artifactId>slf4j-simple</artifactId>
-        <version>${slf4j.version}</version>
-      </dependency>
-      <dependency>
-        <groupId>ch.qos.logback</groupId>
-        <artifactId>logback-classic</artifactId>
-        <version>${logback.version}</version>
-      </dependency>
-      
-      <!-- Spring AI OpenAI SDK -->
-      <dependency>
-        <groupId>org.springframework.ai</groupId>
-        <artifactId>spring-ai-openai</artifactId>
-        <version>${spring.ai.version}</version>
-      </dependency>
 
       <!-- Other dependencies -->
       <dependency>
@@ -116,6 +72,31 @@
       </dependency>
     </dependencies>
   </dependencyManagement>
+
+  <!-- Shared baseline for every runnable workshop application. -->
+  <dependencies>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-webmvc</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-actuator</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-starter-model-openai</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.ai</groupId>
+      <artifactId>spring-ai-client-chat</artifactId>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework.boot</groupId>
+      <artifactId>spring-boot-starter-test</artifactId>
+      <scope>test</scope>
+    </dependency>
+  </dependencies>
 
   <build>
     <pluginManagement>
@@ -143,5 +124,19 @@
         </plugin>
       </plugins>
     </pluginManagement>
+    <plugins>
+      <!-- Repackage runnable child modules; packaging-only aggregators are skipped. -->
+      <plugin>
+        <groupId>org.springframework.boot</groupId>
+        <artifactId>spring-boot-maven-plugin</artifactId>
+        <executions>
+          <execution>
+            <goals>
+              <goal>repackage</goal>
+            </goals>
+          </execution>
+        </executions>
+      </plugin>
+    </plugins>
   </build>
 </project>
