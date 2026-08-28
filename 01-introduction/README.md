@@ -75,14 +75,23 @@ Spring AI provides conversation management through its `ChatMemory` abstraction.
 
 Now that you understand the problem (stateless models), the cost dimension (tokens), and the solution (a sliding memory window), here's how Spring AI implements all three. This module uses two core Spring AI capabilities — **ChatModel** for sending prompts and **Chat Memory** for maintaining conversation history. Here's how the pieces fit together:
 
-**Dependencies** - In the previous module you added `spring-ai-openai` — the plain SDK integration — because those demos built `OpenAiChatModel` by hand inside a `main()` method (calling `OpenAiChatModel.builder()...build()` directly). This module is a Spring Boot web app, so we swap to the **starter** variant, which pulls in the same OpenAI SDK *plus* Spring Boot auto-configuration: `OpenAiChatModel` is constructed for you from properties in `application.yaml` and injected wherever you need it. This is the standard pattern for Spring Boot applications, and it keeps your code clean and focused on business logic rather than boilerplate setup.
+**Dependencies** - A plain Java program that builds `OpenAiChatModel` by hand inside a `main()` method (calling `OpenAiChatModel.builder()...build()` directly) only needs `spring-ai-openai`, the bare SDK integration. Every module in this course is a Spring Boot web app, so we use the **starter** variant instead, which pulls in the same OpenAI SDK *plus* Spring Boot auto-configuration: `OpenAiChatModel` is constructed for you from properties in `application.yaml` and injected wherever you need it. This is the standard pattern for Spring Boot applications, and it keeps your code clean and focused on business logic rather than boilerplate setup.
+
+Because all six modules need the same foundation, it is declared once in the **root [pom.xml](../pom.xml)** and inherited by every module:
 
 ```xml
+<!-- Root pom.xml — inherited by every module -->
 <dependency>
     <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-starter-model-openai</artifactId> <!-- Version managed by Spring AI BOM in root pom.xml -->
+    <artifactId>spring-ai-starter-model-openai</artifactId> <!-- Version managed by the Spring AI BOM -->
+</dependency>
+<dependency>
+    <groupId>org.springframework.ai</groupId>
+    <artifactId>spring-ai-client-chat</artifactId>
 </dependency>
 ```
+
+The root POM also contributes `spring-boot-starter-webmvc`, `spring-boot-starter-actuator`, `spring-boot-starter-test`, and the Spring Boot `repackage` execution that turns each module into a runnable JAR. Each module's own POM therefore lists only what is unique to it — here, just Thymeleaf for the web UI ([pom.xml](pom.xml)).
 
 > Rule of thumb: use `spring-ai-<provider>` for plain Java apps, and `spring-ai-starter-model-<provider>` when running inside Spring Boot.
 

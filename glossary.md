@@ -159,7 +159,8 @@ These terms appear in multiple modules and are worth knowing throughout the cour
 - **Bicep** — Azure's infrastructure-as-code language used by Module 01 to define the Microsoft Foundry resource and model deployments.
 - **Azure CLI** — The `az` command-line tool used for Azure account, resource, and Bicep operations alongside `azd`.
 - **Dev Container / Codespaces** — The pre-configured development environment for this course (Java 25, Maven 3.9+, Copilot) that you can launch as a GitHub Codespace. Spring AI itself runs on Java 17+, but this repo targets Java 25 because it builds on Spring Boot 4.
-- **Maven** — The Java build tool used to compile and run every example (`mvn compile exec:java -Dexec.mainClass=...`).
+- **Maven** — The Java build tool used to compile and package every example (`mvn clean package -DskipTests` from the repo root builds all six modules).
+- **Parent POM** — The root `pom.xml`. It declares the dependencies every module shares (web, actuator, the OpenAI starter, `ChatClient`, and test support), pins plugin versions, and runs the Spring Boot `repackage` execution, so each module's POM only lists what is unique to it.
 - **Spring AI BOM** — The Maven bill of materials (`spring-ai-bom`) that pins Spring AI dependency versions consistently across all modules.
 - **Spring Milestones Repository** — A Maven repository (`repo.spring.io/milestone`) that hosts pre-release Spring AI versions (milestones and release candidates). This course now uses the Spring AI `2.0.1` GA release from Maven Central, so this repository is no longer required.
 - **`application.yaml`** — The Spring Boot configuration file used by modules 1–6 to wire up Microsoft Foundry credentials, model names, and other settings.

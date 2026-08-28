@@ -186,7 +186,7 @@ This happens in a single conversation turn. The agent orchestrates multiple tool
 
 ## How This Uses Spring AI
 
-This module reuses `spring-ai-starter-model-openai` from [Module 01](../01-introduction/README.md#how-this-uses-spring-ai) and `spring-ai-client-chat` introduced in [Module 03](../03-rag/README.md#how-this-uses-spring-ai). No new Spring AI dependencies are added — tool calling is built into `ChatClient` via the `.tools()` method ([pom.xml](pom.xml)).
+This module inherits `spring-ai-starter-model-openai` and `spring-ai-client-chat` from the root [pom.xml](../pom.xml) (see [Module 01](../01-introduction/README.md#how-this-uses-spring-ai)). It adds no Spring AI dependencies of its own — tool calling is built into `ChatClient` via the `.tools()` method, so this module's [pom.xml](pom.xml) only declares Thymeleaf for the web UI.
 
 The `application.yaml` is the same chat-model configuration as Module 01 ([application.yaml](src/main/resources/application.yaml)):
 

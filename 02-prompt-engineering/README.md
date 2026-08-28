@@ -431,9 +431,9 @@ The following diagram shows how constraints guide the model to produce output th
 
 ## How This Uses Spring AI
 
-This module builds on the Spring AI dependency introduced in [Module 01](../01-introduction/README.md#how-this-uses-spring-ai) — `spring-ai-starter-model-openai` — which auto-configures `OpenAiChatModel` and a `ChatClient.Builder` for Microsoft Foundry. The short demos inject `ChatClient` and use its fluent API.
+This module builds on the shared dependencies described in [Module 01](../01-introduction/README.md#how-this-uses-spring-ai) — `spring-ai-starter-model-openai` and `spring-ai-client-chat`, both inherited from the root [pom.xml](../pom.xml) — which auto-configure `OpenAiChatModel` and a `ChatClient.Builder` for Microsoft Foundry. The short demos inject `ChatClient` and use its fluent API.
 
-Two things are different here. First, this module adds `openai-java-client-okhttp` so it can talk to the **Responses API**, which is where `reasoning.effort` actually takes effect and where streaming starts emitting text in seconds rather than after the model has finished thinking. Second, Spring AI's own client is pinned to a 60s timeout that its timeout properties don't override, so the two demos whose prompts run longer than that (`autonomous` and `reason`) collect the Responses stream instead of calling `chatClient`.
+Two things are different here. First, alongside Thymeleaf this module's own [pom.xml](pom.xml) adds `openai-java-client-okhttp` (plus `spring-boot-starter-webflux` for `Flux` streaming) so it can talk to the **Responses API**, which is where `reasoning.effort` actually takes effect and where streaming starts emitting text in seconds rather than after the model has finished thinking. Second, Spring AI's own client is pinned to a 60s timeout that its timeout properties don't override, so the two demos whose prompts run longer than that (`autonomous` and `reason`) collect the Responses stream instead of calling `chatClient`.
 
 The `application.yaml` points at the same `gpt-5.6-luna` deployment as Module 01, and lowers the retry count so a slow prompt fails once rather than four times ([application.yaml](src/main/resources/application.yaml)):
 

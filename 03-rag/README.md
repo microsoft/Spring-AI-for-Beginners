@@ -240,19 +240,13 @@ The diagram below shows this assembly in action — the top-scoring chunks from 
 
 ## How This Uses Spring AI
 
-This module reuses `spring-ai-starter-model-openai` from [Module 01](../01-introduction/README.md#how-this-uses-spring-ai) for the chat model and introduces three new Spring AI dependencies for the RAG pipeline ([pom.xml](pom.xml)):
+This module inherits `spring-ai-starter-model-openai` and `spring-ai-client-chat` from the root [pom.xml](../pom.xml) (see [Module 01](../01-introduction/README.md#how-this-uses-spring-ai)), and its own [pom.xml](pom.xml) adds two Spring AI dependencies for the RAG pipeline:
 
 ```xml
-<!-- Fluent ChatClient API with advisor support (used by AdvisorRagService) -->
-<dependency>
-    <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-client-chat</artifactId> <!-- Version managed by Spring AI BOM in root pom.xml -->
-</dependency>
-
 <!-- QuestionAnswerAdvisor — automatically retrieves relevant context and injects it into prompts -->
 <dependency>
     <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-vector-store-advisor</artifactId>
+    <artifactId>spring-ai-vector-store-advisor</artifactId> <!-- Version managed by the Spring AI BOM -->
 </dependency>
 
 <!-- SimpleVectorStore — in-memory vector store for document embeddings -->
@@ -261,6 +255,8 @@ This module reuses `spring-ai-starter-model-openai` from [Module 01](../01-intro
     <artifactId>spring-ai-vector-store</artifactId>
 </dependency>
 ```
+
+It also adds Thymeleaf for the web UI, Apache PDFBox for reading uploaded PDFs, and `spring-boot-starter-webmvc-test` for the `@WebMvcTest` slice.
 
 The `application.yaml` extends Module 01's config with an **embedding model** for converting text to vectors ([application.yaml](src/main/resources/application.yaml)):
 
@@ -422,13 +418,13 @@ Spring AI 2.0 provides a `QuestionAnswerAdvisor` that encapsulates the entire RA
 **Dependencies** — In addition to `spring-ai-starter-model-openai` and `spring-ai-vector-store`, you need:
 
 ```xml
-<!-- Spring AI ChatClient for fluent API and advisor support -->
+<!-- Spring AI ChatClient for fluent API and advisor support (inherited from the root pom.xml in this repo) -->
 <dependency>
     <groupId>org.springframework.ai</groupId>
     <artifactId>spring-ai-client-chat</artifactId>
 </dependency>
 
-<!-- Spring AI Advisors for QuestionAnswerAdvisor -->
+<!-- Spring AI Advisors for QuestionAnswerAdvisor (declared by this module) -->
 <dependency>
     <groupId>org.springframework.ai</groupId>
     <artifactId>spring-ai-vector-store-advisor</artifactId>

@@ -14,6 +14,9 @@ guidelines when submitting changes:
    the `src/test/java` folder.
 4. **Follow code style conventions.** Use the existing project
    structure as a guide.  We rely on Maven to manage dependencies and
-   the Spring Boot Maven plugin to package applications.
+   the Spring Boot Maven plugin to package applications.  Shared
+   dependencies, plugin versions, and the `repackage` execution live in
+   the root `pom.xml`; add a dependency to a module's own `pom.xml` only
+   when that module actually needs it.
 
 Thank you for helping make this course better!

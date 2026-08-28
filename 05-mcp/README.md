@@ -75,6 +75,8 @@ This module uses **Streamable HTTP**, the modern recommended MCP transport (it r
 
 Now that you understand what MCP is and how the client–server protocol works, here's how Spring AI implements both sides. This module is two Spring Boot applications. The **server** uses the Web MVC MCP server starter to expose `@McpTool` endpoints over Streamable HTTP, plus the OpenAI starter so it can call Microsoft Foundry from inside the `aiMove` tool. The **client** uses the matching MCP client starter to discover those tools, plus the OpenAI starter so the agent path can hand the discovered tools to a `ChatClient`.
 
+Both applications inherit `spring-ai-starter-model-openai` and `spring-ai-client-chat` from the root [pom.xml](../pom.xml) (see [Module 01](../01-introduction/README.md#how-this-uses-spring-ai)), so each application's POM declares only what is unique to it.
+
 **Server dependencies** ([mcp-server/pom.xml](mcp-server/pom.xml)):
 
 ```xml
@@ -83,21 +85,9 @@ Now that you understand what MCP is and how the client–server protocol works, 
     <groupId>org.springframework.ai</groupId>
     <artifactId>spring-ai-starter-mcp-server-webmvc</artifactId>
 </dependency>
-
-<!-- Microsoft Foundry via the OpenAI SDK starter -->
-<dependency>
-    <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-starter-model-openai</artifactId>
-</dependency>
-
-<!-- Spring AI ChatClient — used by aiMove for LLM strategy -->
-<dependency>
-    <groupId>org.springframework.ai</groupId>
-    <artifactId>spring-ai-client-chat</artifactId>
-</dependency>
 ```
 
-**Client dependencies** ([mcp-client/pom.xml](mcp-client/pom.xml)) mirror the server, replacing the server starter with `spring-ai-starter-mcp-client-webflux`. The OpenAI starter and `spring-ai-client-chat` are only needed for the agent path; the direct-call path doesn't use them.
+**Client dependencies** ([mcp-client/pom.xml](mcp-client/pom.xml)) mirror that, swapping in `spring-ai-starter-mcp-client-webflux` and adding Thymeleaf for the web UI. The inherited OpenAI starter and `spring-ai-client-chat` are only needed for the agent path; the direct-call path doesn't use them.
 
 **Server configuration** ([application.yaml](mcp-server/src/main/resources/application.yaml)) wires Microsoft Foundry credentials and declares the MCP server:
 
