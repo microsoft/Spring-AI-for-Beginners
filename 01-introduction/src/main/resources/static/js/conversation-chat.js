@@ -107,10 +107,11 @@ async function loadHistory() {
 
         if (response.ok && data.messages && data.messages.length > 0) {
             data.messages.forEach(msg => {
-                if (msg.type === 'USER') {
-                    const text = msg.contents && msg.contents[0] ? msg.contents[0].text : '';
+                const messageType = msg.messageType || msg.type;
+                if (messageType === 'USER') {
+                    const text = msg.text || (msg.contents && msg.contents[0] ? msg.contents[0].text : '');
                     if (text) addMessage('user', text);
-                } else if (msg.type === 'AI') {
+                } else if (messageType === 'ASSISTANT' || messageType === 'AI') {
                     if (msg.text) addMessage('ai', msg.text);
                 }
             });
