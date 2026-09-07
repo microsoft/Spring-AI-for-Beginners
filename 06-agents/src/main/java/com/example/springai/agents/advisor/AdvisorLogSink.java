@@ -1,5 +1,6 @@
 package com.example.springai.agents.advisor;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -21,6 +22,12 @@ public class AdvisorLogSink {
         emitter.onCompletion(() -> emitters.remove(emitter));
         emitter.onTimeout(() -> emitters.remove(emitter));
         emitter.onError(e -> emitters.remove(emitter));
+        try {
+            emitter.send(SseEmitter.event().name("ready").data("connected"));
+        } catch (IOException exception) {
+            emitters.remove(emitter);
+            emitter.completeWithError(exception);
+        }
         return emitter;
     }
 

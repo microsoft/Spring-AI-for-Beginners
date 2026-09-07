@@ -111,3 +111,4 @@ render-puml.py
 # Anchored: an unanchored "tools/" also matched 04-tools' com/example/springai/tools package.
 /tools/
 .devcontainer/devcontainer-lock.json
+/presentations

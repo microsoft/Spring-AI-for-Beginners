@@ -15,9 +15,26 @@ function connectLogStream() {
         const data = JSON.parse(event.data);
         appendLogEntry(data);
     });
-    logEventSource.onerror = function () {
-        // reconnect silently if the connection drops
-    };
+    const source = logEventSource;
+    return new Promise((resolve, reject) => {
+        let connected = false;
+        const timeout = setTimeout(() => {
+            source.close();
+            reject(new Error('Advisor log connection timed out. Please try again.'));
+        }, 10000);
+        source.addEventListener('ready', function () {
+            connected = true;
+            clearTimeout(timeout);
+            resolve();
+        }, { once: true });
+        source.onerror = function () {
+            if (!connected) {
+                clearTimeout(timeout);
+                source.close();
+                reject(new Error('Unable to connect to advisor logs. Please try again.'));
+            }
+        };
+    });
 }
 
 function disconnectLogStream() {
@@ -57,7 +74,7 @@ async function callPattern(endpoint, requestBody) {
         loadingDiv.style.display = 'block';
         responseDiv.innerHTML = '';
         submitBtn.disabled = true;
-        connectLogStream();
+        await connectLogStream();
 
         const response = await fetch('/api/agents/' + endpoint, {
             method: 'POST',
