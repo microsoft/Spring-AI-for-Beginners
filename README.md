@@ -1,4 +1,4 @@
-<img src="img/banner.png" alt="Spring AI for Beginners Banner">
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/img/banner.png?v=80d68e6279a98efb" alt="Spring AI for Beginners Banner">
 
 # Spring AI for Beginners
 

@@ -52,7 +52,7 @@ Tools change this. By giving the model access to functions it can call, you tran
 
 Without tools, a language model can only generate text from its training data. Ask it for the current weather, and it has to guess. Give it tools, and it can call a weather API, perform calculations, or query a database — then weave those real results into its response.
 
-<img src="images/what-are-tools.png" alt="Without Tools vs With Tools" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/what-are-tools.png?v=8262f7417dd5ad23" alt="Without Tools vs With Tools" width="800"/>
 
 *Without tools the model can only guess — with tools it can call APIs, run calculations, and return real-time data.*
 
@@ -63,7 +63,7 @@ An AI agent with tools follows a **Reasoning and Acting (ReAct)** pattern. The m
 3. **Observe** — The agent receives the tool's output and evaluates the result
 4. **Repeat or Respond** — If more data is needed, the agent loops back; otherwise, it composes a natural language answer
 
-<img src="images/react-pattern-detail.png" alt="ReAct Pattern" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/react-pattern-detail.png?v=736356208ddb1505" alt="ReAct Pattern" width="800"/>
 
 *The ReAct cycle — the agent reasons about what to do, acts by calling a tool, observes the result, and loops until it can deliver the final answer.*
 
@@ -101,7 +101,7 @@ chatClient.prompt()
 
 The diagram below breaks down every annotation and shows how each piece helps the AI understand when to call the tool and what arguments to pass:
 
-<img src="images/tool-definitions-anatomy.png" alt="Anatomy of Tool Definitions" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/tool-definitions-anatomy.png?v=4ca82386e2136b2c" alt="Anatomy of Tool Definitions" width="800"/>
 
 *Anatomy of a tool definition — @Tool tells the AI when to use it, @ToolParam describes each parameter, and ChatClient wires everything together at call time.*
 
@@ -116,7 +116,7 @@ When a user asks "What's the weather in Seattle?", the model doesn't randomly pi
 
 If no tool matches the user's request, the model falls back to answering from its own knowledge. If multiple tools match, it picks the most specific one.
 
-<img src="images/decision-making.png" alt="How the AI Decides Which Tool to Use" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/decision-making.png?v=3ca6c486984bb095" alt="How the AI Decides Which Tool to Use" width="800"/>
 
 *The model evaluates every available tool against the user's intent and selects the best match — this is why writing clear, specific tool descriptions matters.*
 
@@ -126,13 +126,13 @@ If no tool matches the user's request, the model falls back to answering from it
 
 Spring AI's `ChatClient` accepts tool instances via `.tools()` and executes tool calls automatically. Behind the scenes, a complete tool call flows through six stages — from the user's natural language question all the way back to a natural language answer:
 
-<img src="images/tool-calling-flow.png" alt="Tool Calling Flow" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/tool-calling-flow.png?v=d9372f5a36b9448e" alt="Tool Calling Flow" width="800"/>
 
 *The end-to-end flow — the user asks a question, the model selects a tool, Spring AI executes it, and the model weaves the result into a natural response.*
 
 The sequence diagram below shows exactly what happens under the hood during a tool call:
 
-<img src="images/tool-calling-sequence.png" alt="Tool Calling Sequence Diagram" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/tool-calling-sequence.png?v=88e0c4401aab63e3" alt="Tool Calling Sequence Diagram" width="800"/>
 
 *The tool-calling loop — the app asks ChatClient, which sends the message and tool schemas to the LLM. The LLM requests a tool call, ChatClient executes it, and the LLM uses the result to compose the final answer.*
 
@@ -149,13 +149,13 @@ The model receives the weather data and formats it into a natural language respo
 
 This module uses Spring AI's `ChatClient` with tool instances passed via `.tools()`. Spring Boot auto-configures the `ChatClient.Builder` bean with your `ChatModel` — you create tool instances and pass them at call time.
 
-<img src="images/spring-boot-wiring.png" alt="Spring Boot Auto-Wiring Architecture" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/spring-boot-wiring.png?v=514f0628208175cd" alt="Spring Boot Auto-Wiring Architecture" width="800"/>
 
 *ChatClient ties together the ChatModel and tool instances — Spring Boot auto-configures the builder, and you pass tools at call time via .tools().*
 
 Here's the full request lifecycle as a sequence diagram — from the HTTP request through the controller and ChatClient, all the way to the tool execution and back:
 
-<img src="images/spring-boot-sequence.png" alt="Spring Boot Tool Calling Sequence" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/spring-boot-sequence.png?v=facf35e5f72da77d" alt="Spring Boot Tool Calling Sequence" width="800"/>
 
 *The complete Spring Boot request lifecycle — HTTP Client → Controller → AgentService → ChatClient → Microsoft Foundry → WeatherTool and back. The LLM decides to call the tool, gets the result, and returns a natural language answer.*
 
@@ -174,13 +174,13 @@ Alternative approaches (manual `ChatModel.call()` with tool handling) require mo
 
 **Tool Chaining** — The real power of tool-based agents shows when a single question requires multiple tools. Ask "What's the weather in Seattle in Fahrenheit?" and the agent automatically chains two tools: first it calls `getCurrentWeather` to get the temperature in Celsius, then it passes that value to `celsiusToFahrenheit` for conversion — all in a single conversation turn.
 
-<img src="images/tool-chaining-example.png" alt="Tool Chaining Example" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/tool-chaining-example.png?v=1f21d24f8938994d" alt="Tool Chaining Example" width="800"/>
 
 *Tool chaining in action — the agent calls getCurrentWeather first, then pipes the Celsius result into celsiusToFahrenheit, and delivers a combined answer.*
 
 **Graceful Failures** — Ask for weather in a city that's not in the mock data. The tool returns an error message, and the AI explains it can't help rather than crashing. Tools fail safely. The diagram below contrasts the two approaches — with proper error handling, the agent catches the exception and responds helpfully, while without it the entire application crashes:
 
-<img src="images/error-handling-flow.png" alt="Error Handling Flow" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/error-handling-flow.png?v=54949a4ac6c1463f" alt="Error Handling Flow" width="800"/>
 
 *When a tool fails, the agent catches the error and responds with a helpful explanation instead of crashing.*
 
@@ -237,7 +237,7 @@ From the Spring Boot Dashboard, you can:
 
 Simply click the play button next to "spring-ai-tools" to start this module, or start all modules at once.
 
-<img src="images/dashboard.png" alt="Spring Boot Dashboard" width="300"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/dashboard.png?v=0e03884cfc5fceda" alt="Spring Boot Dashboard" width="300"/>
 
 **Option 2: Using shell scripts**
 
@@ -307,7 +307,7 @@ cd ..; .\stop-all.ps1  # All modules
 
 The application provides a web interface where you can interact with an AI agent that has access to weather and temperature conversion tools. Here's what the interface looks like — it includes quick-start examples and a chat panel for sending requests:
 
-<a href="images/tools-homepage.png"><img src="images/tools-homepage.png" alt="AI Agent Tools Interface" width="800" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/></a>
+<a href="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/tools-homepage.png?v=b4f028410a803149"><img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/tools-homepage.png?v=b4f028410a803149" alt="AI Agent Tools Interface" width="800" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/></a>
 
 *The AI Agent Tools interface - quick examples and chat interface for interacting with tools*
 
@@ -327,7 +327,7 @@ For chained requests, the **Tools run** line can show multiple tool calls in the
 
 The chat interface maintains conversation history, allowing you to have multi-turn interactions. You can see all previous queries and responses, making it easy to track the conversation and understand how the agent builds context over multiple exchanges.
 
-<a href="images/tools-conversation-demo.png"><img src="images/tools-conversation-demo.png" alt="Conversation with Multiple Tool Calls" width="800" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/></a>
+<a href="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/tools-conversation-demo.png?v=4296ae23d062b555"><img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/tools-conversation-demo.png?v=4296ae23d062b555" alt="Conversation with Multiple Tool Calls" width="800" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/></a>
 
 *Multi-turn conversation showing simple conversions, weather lookups, and tool chaining*
 
@@ -354,7 +354,7 @@ The quality of your tool descriptions directly affects how well the agent uses t
 
 The service uses Spring AI's `MessageWindowChatMemory` for automatic session-based memory management. Each session ID gets its own conversation history within the `ChatMemory` instance, so multiple users can interact with the agent simultaneously without their conversations mixing together. The following diagram shows how multiple users are routed to isolated memory stores based on their session IDs:
 
-<img src="images/session-management.png" alt="Session Management with ChatMemory" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/session-management.png?v=2b635044da532cad" alt="Session Management with ChatMemory" width="800"/>
 
 *Each session ID maps to an isolated conversation history — users never see each other's messages.*
 
@@ -366,7 +366,7 @@ Tools can fail — APIs timeout, parameters might be invalid, external services 
 
 The diagram below shows the broad ecosystem of tools you can build. This module demonstrates weather and temperature tools, but the same `@Tool` pattern works for any Java method — from database queries to payment processing.
 
-<img src="images/tool-ecosystem.png" alt="Tool Ecosystem" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/tool-ecosystem.png?v=ea7aa002d76ccabe" alt="Tool Ecosystem" width="800"/>
 
 *Any Java method annotated with @Tool becomes available to the AI — the pattern extends to databases, APIs, email, file operations, and more.*
 
@@ -374,7 +374,7 @@ The diagram below shows the broad ecosystem of tools you can build. This module 
 
 Not every request needs tools. The decision comes down to whether the AI needs to interact with external systems or can answer from its own knowledge. The following guide summarizes when tools add value and when they're unnecessary:
 
-<img src="images/when-to-use-tools.png" alt="When to Use Tools" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/when-to-use-tools.png?v=53649c747f6238ff" alt="When to Use Tools" width="800"/>
 
 *A quick decision guide — tools are for real-time data, calculations, and actions; general knowledge and creative tasks don't need them.*
 
@@ -382,7 +382,7 @@ Not every request needs tools. The decision comes down to whether the AI needs t
 
 Modules 03 and 04 both extend what the AI can do, but in fundamentally different ways. RAG gives the model access to **knowledge** by retrieving documents. Tools give the model the ability to take **actions** by calling functions. The diagram below compares these two approaches side by side — from how each workflow operates to the trade-offs between them:
 
-<img src="images/tools-vs-rag.png" alt="Tools vs RAG Comparison" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/04-tools/images/tools-vs-rag.png?v=070f71f3d7e02a18" alt="Tools vs RAG Comparison" width="800"/>
 
 *RAG retrieves information from static documents — Tools execute actions and fetch dynamic, real-time data. Many production systems combine both.*
 

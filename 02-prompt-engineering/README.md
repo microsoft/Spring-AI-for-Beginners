@@ -33,7 +33,7 @@
 
 The following diagram provides an overview of the key topics and skills you'll develop in this module — from prompt refinement techniques to the step-by-step workflow you'll follow.
 
-<img src="images/what-youll-learn.png" alt="What You'll Learn" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/what-youll-learn.png?v=87c70ae2519292fb" alt="What You'll Learn" width="800"/>
 
 In the previous module, you explored basic Spring AI interactions with Microsoft Foundry and saw how memory enables conversational AI. Now we'll focus on how you ask questions — the prompts themselves — using the same `gpt-5.6-luna` model. The way you structure your prompts dramatically affects the quality of responses you get. We start with a review of the fundamental prompting techniques, then move into eight advanced patterns that take full advantage of the model's reasoning capabilities.
 
@@ -52,7 +52,7 @@ We'll use `gpt-5.6-luna` because it's a reasoning model with adjustable reasonin
 
 At its core, prompt engineering is the difference between vague instructions and precise ones, as the comparison below illustrates.
 
-<img src="images/what-is-prompt-engineering.png" alt="What is Prompt Engineering?" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/what-is-prompt-engineering.png?v=35d24e8a0e23d11c" alt="What is Prompt Engineering?" width="800"/>
 
 Prompt engineering is about designing input text that consistently gets you the results you need. It's not just about asking questions - it's about structuring requests so the model understands exactly what you want and how to deliver it.
 
@@ -62,7 +62,7 @@ Think of it like giving instructions to a colleague. "Fix the bug" is vague. "Fi
 
 The five core techniques shown below form the foundation of effective prompt engineering. Each one addresses a different aspect of how you communicate with language models.
 
-<img src="images/five-patterns-overview.png" alt="Five Prompt Engineering Patterns Overview" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/five-patterns-overview.png?v=9d17cdfaad725e11" alt="Five Prompt Engineering Patterns Overview" width="800"/>
 
 Before diving into the advanced patterns in this module, let's review five foundational prompting techniques. These are the building blocks that every prompt engineer should know.
 
@@ -70,7 +70,7 @@ Before diving into the advanced patterns in this module, let's review five found
 
 The simplest approach: give the model a direct instruction with no examples. The model relies entirely on its training to understand and execute the task. This works well for straightforward requests where the expected behavior is obvious.
 
-<img src="images/zero-shot-prompting.png" alt="Zero-Shot Prompting" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/zero-shot-prompting.png?v=b9cff99607af65e7" alt="Zero-Shot Prompting" width="800"/>
 
 *Direct instruction without examples — the model infers the task from the instruction alone*
 
@@ -86,7 +86,7 @@ String response = chatClient.prompt(prompt).call().content();
 
 Provide examples that demonstrate the pattern you want the model to follow. The model learns the expected input-output format from your examples and applies it to new inputs. This dramatically improves consistency for tasks where the desired format or behavior isn't obvious.
 
-<img src="images/few-shot-prompting.png" alt="Few-Shot Prompting" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/few-shot-prompting.png?v=80d3f10862d2e5c5" alt="Few-Shot Prompting" width="800"/>
 
 *Learning from examples — the model identifies the pattern and applies it to new inputs*
 
@@ -111,7 +111,7 @@ String response = chatClient.prompt(prompt).call().content();
 
 Ask the model to show its reasoning step-by-step. Instead of jumping straight to an answer, the model breaks down the problem and works through each part explicitly. This improves accuracy on math, logic, and multi-step reasoning tasks.
 
-<img src="images/chain-of-thought.png" alt="Chain of Thought Prompting" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/chain-of-thought.png?v=b23245a61e407619" alt="Chain of Thought Prompting" width="800"/>
 
 *Step-by-step reasoning — breaking complex problems into explicit logical steps*
 
@@ -132,7 +132,7 @@ String response = chatClient.prompt(prompt).call().content();
 
 Set a persona or role for the AI before asking your question. This provides context that shapes the tone, depth, and focus of the response. A "software architect" gives different advice than a "junior developer" or a "security auditor".
 
-<img src="images/role-based-prompting.png" alt="Role-Based Prompting" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/role-based-prompting.png?v=937412083194621f" alt="Role-Based Prompting" width="800"/>
 
 *Setting context and persona — the same question gets a different response depending on the assigned role*
 
@@ -156,7 +156,7 @@ String response = chatClient.prompt(prompt).call().content();
 
 Create reusable prompts with variable placeholders. Instead of writing a new prompt every time, define a template once and fill in different values. Spring AI's `PromptTemplate` class makes this easy with `{variable}` syntax — single curly braces around variable names like `{destination}` and `{activity}`. You define the template string once, then call `template.create()` with a map of values to produce different prompts from the same structure.
 
-<img src="images/prompt-templates.png" alt="Prompt Templates" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/prompt-templates.png?v=4c5c30f30783016a" alt="Prompt Templates" width="800"/>
 
 *This diagram shows how a single Spring AI `PromptTemplate` with `{destination}` and `{activity}` placeholders produces different prompts by swapping in variable values — Set 1 fills in "Paris" and "sightseeing", Set 2 fills in "Tokyo" and "hiking", both from the same reusable template.*
 
@@ -183,13 +183,13 @@ These five fundamentals give you a solid toolkit for most prompting tasks. The r
 
 With the fundamentals covered, let's move to the eight advanced patterns that make this module unique. Not all problems need the same approach. Some questions need quick answers, others need deep thinking. Some need visible reasoning, others just need results. Each pattern below is optimized for a different scenario — and gpt-5.6-luna's reasoning control makes the differences even more pronounced.
 
-<img src="images/eight-patterns.png" alt="Eight Prompting Patterns" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/eight-patterns.png?v=dcea0934ba020d2f" alt="Eight Prompting Patterns" width="800"/>
 
 *Overview of the eight prompt engineering patterns and their use cases*
 
 `gpt-5.6-luna` adds another dimension to these patterns: *reasoning control*. You set `reasoning.effort` per request, and it changes how long the model thinks before it starts answering.
 
-<img src="images/reasoning-control.png" alt="Reasoning effort levels and their measured time to first token" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/reasoning-control.png?v=c99ee4548db3d5ea" alt="Reasoning effort levels and their measured time to first token" width="800"/>
 
 *The same deployment at four different thinking budgets — `none` answers immediately, `high` disappears for the better part of a minute*
 
@@ -278,7 +278,7 @@ Chain-of-Thought prompting explicitly asks the model to show its reasoning proce
 
 The diagram below illustrates this Plan → Execute → Summarize workflow.
 
-<img src="images/task-execution-pattern.png" alt="Task Execution Pattern" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/task-execution-pattern.png?v=a741aa872a5a8a85" alt="Task Execution Pattern" width="800"/>
 
 *Plan → Execute → Summarize workflow for multi-step tasks*
 
@@ -295,7 +295,7 @@ String response = chatClient.prompt(prompt).call().content();
 
 The diagram below shows this iterative improvement loop — generate, evaluate, identify weaknesses, and refine until the code meets production standards.
 
-<img src="images/self-reflection-cycle.png" alt="Self-Reflection Cycle" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/self-reflection-cycle.png?v=e88dab3dd0f609bd" alt="Self-Reflection Cycle" width="800"/>
 
 *Iterative improvement loop - generate, evaluate, identify issues, improve, repeat*
 
@@ -354,7 +354,7 @@ String response = chatClient.prompt(prompt).call().content();
 
 The following diagram shows how this structured framework organizes a code review into consistent categories with severity levels.
 
-<img src="images/structured-analysis-pattern.png" alt="Structured Analysis Pattern" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/structured-analysis-pattern.png?v=282bf95fbdf8d7b2" alt="Structured Analysis Pattern" width="800"/>
 
 *Framework for consistent code reviews with severity levels*
 
@@ -385,7 +385,7 @@ chatMemory.add(sessionId, new AssistantMessage(response2));
 
 The diagram below visualizes how conversation context accumulates with each turn and how it relates to the model's token limit.
 
-<img src="images/context-memory.png" alt="Context Memory" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/context-memory.png?v=98d161b0dc6ad386" alt="Context Memory" width="800"/>
 
 *How conversation context accumulates over multiple turns until reaching the token limit*
 
@@ -405,7 +405,7 @@ String response = chatClient.prompt(prompt).call().content();
 
 The diagram below illustrates how the model breaks problems into explicit, numbered logical steps.
 
-<img src="images/step-by-step-pattern.png" alt="Step-by-Step Pattern" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/step-by-step-pattern.png?v=03218b4ae6b6dafb" alt="Step-by-Step Pattern" width="800"/>
 
 *Breaking down problems into explicit logical steps*
 
@@ -427,7 +427,7 @@ String response = chatClient.prompt(prompt).call().content();
 
 The following diagram shows how constraints guide the model to produce output that strictly adheres to your format and length requirements.
 
-<img src="images/constrained-output-pattern.png" alt="Constrained Output Pattern" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/constrained-output-pattern.png?v=5f0fd2278be0c98f" alt="Constrained Output Pattern" width="800"/>
 
 *Enforcing specific format, length, and structure requirements*
 
@@ -456,7 +456,7 @@ The streaming client itself is built in [SpringAiConfig](src/main/java/com/examp
 
 The diagram below shows the Spring AI components involved in prompt engineering — `PromptTemplate` resolves variables into a `Prompt`, `ChatClient` sends it to the model via `ChatModel`, and you get a structured response back.
 
-<img src="images/how-springai-fits.png" alt="Spring AI Prompt Engineering Flow" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/how-springai-fits.png?v=833b5209f08686e3" alt="Spring AI Prompt Engineering Flow" width="800"/>
 
 ## Run the Application
 
@@ -490,7 +490,7 @@ From the Spring Boot Dashboard, you can:
 
 Simply click the play button next to "spring-ai-prompt-engineering" to start this module, or start all modules at once.
 
-<img src="images/dashboard.png" alt="Spring Boot Dashboard" width="300"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/dashboard.png?v=0e03884cfc5fceda" alt="Spring Boot Dashboard" width="300"/>
 
 **Option 2: Using shell scripts**
 
@@ -560,7 +560,7 @@ cd ..; .\stop-all.ps1  # All modules
 
 Here is the main interface of the prompt engineering module, where you can experiment with all eight patterns side by side.
 
-<img src="images/dashboard-home.png" alt="Dashboard Home" width="800" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/dashboard-home.png?v=13f8ebc145f8eb30" alt="Dashboard Home" width="800" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/>
 
 *The main dashboard showing all 8 prompt engineering patterns with their characteristics and use cases*
 
@@ -576,11 +576,11 @@ The web interface lets you experiment with different prompting strategies. Each 
 
 Ask a simple question like "What is 15% of 200?" using Low Eagerness. You'll get an instant, direct answer. Now ask something complex like "Design a caching strategy for a high-traffic API" using High Eagerness. Click **🔴 Stream Response (Live)** and watch the model's detailed reasoning appear token-by-token. Same model, same question structure - but the prompt tells it how much thinking to do.
 
-<img src="images/low-eagerness-demo.png" alt="Low Eagerness demo" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/low-eagerness-demo.png?v=823445c783704a44" alt="Low Eagerness demo" width="800"/>
 
 *Low Eagerness — a one-line calculation answered in two reasoning steps*
 
-<img src="images/high-eagerness-demo.png" alt="High Eagerness demo" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/high-eagerness-demo.png?v=9681f6d1733268db" alt="High Eagerness demo" width="800"/>
 
 *High Eagerness — the same model, streaming a thorough architectural analysis*
 
@@ -588,7 +588,7 @@ Ask a simple question like "What is 15% of 200?" using Low Eagerness. You'll get
 
 Multi-step workflows benefit from upfront planning and progress narration. The model outlines what it will do, narrates each step, then summarizes results.
 
-<img src="images/task-execution-demo.png" alt="Task Execution demo" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/task-execution-demo.png?v=97bd0881dc6deb73" alt="Task Execution demo" width="800"/>
 
 *Plan → Execute → Summarize in action for a REST endpoint task*
 
@@ -596,7 +596,7 @@ Multi-step workflows benefit from upfront planning and progress narration. The m
 
 Try "Create an email validation service". Instead of just generating code and stopping, the model generates, evaluates against quality criteria, identifies weaknesses, and improves. You'll see it iterate until the code meets production standards.
 
-<img src="images/self-reflecting-code-demo.png" alt="Self-Reflecting Code demo" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/self-reflecting-code-demo.png?v=f72c00167eacd793" alt="Self-Reflecting Code demo" width="800"/>
 
 *Streaming output showing the model generating, evaluating, and refining a validation service*
 
@@ -604,7 +604,7 @@ Try "Create an email validation service". Instead of just generating code and st
 
 Code reviews need consistent evaluation frameworks. The model analyzes code using fixed categories (correctness, practices, performance, security) with severity levels.
 
-<img src="images/structured-analysis-demo.png" alt="Structured Analysis demo" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/structured-analysis-demo.png?v=ce51dc60708bbbdf" alt="Structured Analysis demo" width="800"/>
 
 *A code snippet reviewed across correctness, best practices, performance, security, and maintainability*
 
@@ -612,7 +612,7 @@ Code reviews need consistent evaluation frameworks. The model analyzes code usin
 
 Ask "What is Spring Boot?" then immediately follow up with "Show me an example". The model remembers your first question and gives you a Spring Boot example specifically. Without memory, that second question would be too vague.
 
-<img src="images/multi-turn-chat-demo.png" alt="Multi-Turn Chat demo" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/multi-turn-chat-demo.png?v=14c2cd97bfeb0080" alt="Multi-Turn Chat demo" width="800"/>
 
 *Follow-up “Show me a minimal example” never mentions Spring Boot — the answer still does, because context from the previous turn was preserved*
 
@@ -620,7 +620,7 @@ Ask "What is Spring Boot?" then immediately follow up with "Show me an example".
 
 Pick a math problem and try it with both Step-by-Step Reasoning and Low Eagerness. Low eagerness just gives you the answer - fast but opaque. Step-by-step shows you every calculation and decision.
 
-<img src="images/step-by-step-reasoning-demo.png" alt="Step-by-Step Reasoning demo" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/step-by-step-reasoning-demo.png?v=486ae397a28befa5" alt="Step-by-Step Reasoning demo" width="800"/>
 
 *Understanding, approach, then each step laid out explicitly before the conclusion*
 
@@ -628,7 +628,7 @@ Pick a math problem and try it with both Step-by-Step Reasoning and Low Eagernes
 
 When you need specific formats or word counts, this pattern enforces strict adherence. Try generating a summary with exactly 100 words in bullet point format.
 
-<img src="images/constrained-output-demo.png" alt="Constrained Output demo" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/constrained-output-demo.png?v=1e4a139dc4c3bcaa" alt="Constrained Output demo" width="800"/>
 
 *A 100-word, bullet-point summary of machine learning — format and length strictly enforced*
 
@@ -642,7 +642,7 @@ When you need specific formats or word counts, this pattern enforces strict adhe
 
 Notice the XML tags in the prompts? They're not decorative. Models follow structured instructions more reliably than freeform text. When you need multi-step processes or complex logic, structure helps the model track where it is and what comes next. The diagram below breaks down a request: `reasoning.effort` is a dial you set alongside the prompt, while tags like `<system>`, `<instructions>`, `<context>`, `<user-input>`, and `<constraints>` organize the prompt itself into clear sections.
 
-<img src="images/prompt-structure.png" alt="Anatomy of a request: reasoning effort as an API parameter alongside the structured prompt" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/02-prompt-engineering/images/prompt-structure.png?v=927635bfad773b5f" alt="Anatomy of a request: reasoning effort as an API parameter alongside the structured prompt" width="800"/>
 
 *Two separate dials — the reasoning budget you pass to the API, and the structure you put inside the prompt*
 

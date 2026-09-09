@@ -57,13 +57,13 @@ This grounds the model's responses in your actual data instead of relying on its
 
 The diagram below illustrates the core concept: instead of relying on the model's training data alone, RAG gives it a reference library of your documents to consult before generating each answer.
 
-<img src="images/what-is-rag.png" alt="What is RAG" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/what-is-rag.png?v=372ba0a2aa72a261" alt="What is RAG" width="800"/>
 
 *This diagram shows the difference between a standard LLM (which guesses from training data) and a RAG-enhanced LLM (which consults your documents first).*
 
 Here's how the pieces connect end-to-end. A user's question flows through four stages — embedding, vector search, context assembly, and answer generation — each building on the previous one:
 
-<img src="images/rag-architecture.png" alt="RAG Architecture" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/rag-architecture.png?v=138b7bd0a305d6a1" alt="RAG Architecture" width="800"/>
 
 *This diagram shows the end-to-end RAG pipeline — a user query flows through embedding, vector search, context assembly, and answer generation.*
 
@@ -81,7 +81,7 @@ Spring AI offers different ways to implement RAG, each with a different level of
 
 The diagram below compares these three levels of abstraction — from the fully manual Native approach, through the Advisor-based pipeline, to a full ETL pipeline — so you can see the trade-off between control and convenience at a glance.
 
-<img src="images/rag-approaches.png" alt="RAG Approaches" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/rag-approaches.png?v=d52b5cbd4598498a" alt="RAG Approaches" width="800"/>
 
 *This diagram compares three Spring AI RAG approaches side by side: Native RAG (manual vector search, context assembly, and prompt building), Advisor-based RAG (QuestionAnswerAdvisor handles retrieval and injection automatically), and full ETL pipeline (end-to-end document processing with minimal code).*
 
@@ -93,13 +93,13 @@ The RAG pipeline has four stages: **Ingest**, **Transform**, **Store & Search**,
 
 The class hierarchy below shows how Spring AI organizes these stages. Each stage has a core interface with swappable implementations, so you can change the vector database or document reader without rewriting the pipeline:
 
-<img src="images/rag-spring-ai-classes.png" alt="Spring AI RAG Class Hierarchy" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/rag-spring-ai-classes.png?v=e2f9522c04bfaa0e" alt="Spring AI RAG Class Hierarchy" width="800"/>
 
 *Spring AI's four-stage RAG class hierarchy — each stage has a core interface with pluggable implementations you can swap without changing the rest of the pipeline.*
 
 Here's how those classes connect at runtime. Documents flow left to right through the ETL pipeline — read, chunked, embedded, stored. Queries flow the same direction — the advisor searches the store, injects matching chunks into the prompt, and the chat client generates an answer:
 
-<img src="images/rag-pipeline.png" alt="Spring AI ETL RAG Pipeline" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/rag-pipeline.png?v=490901efc8218b37" alt="Spring AI ETL RAG Pipeline" width="800"/>
 
 *The ETL pipeline in action — documents are processed and stored once; queries retrieve relevant chunks on the fly and feed them to the LLM.*
 
@@ -125,7 +125,7 @@ List<Document> segments = splitter.split(document);
 
 The diagram below shows how this works visually. Notice how each chunk shares some tokens with its neighbors — the 30-token overlap ensures no important context falls between the cracks:
 
-<img src="images/document-chunking.png" alt="Document Chunking" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/document-chunking.png?v=739e7405cda80a5f" alt="Document Chunking" width="800"/>
 
 *This diagram illustrates the general technique of splitting a document into overlapping chunks to preserve context at the boundaries. Spring AI's `TokenTextSplitter`, used in this module, splits purely on token count and does not add overlap.*
 
@@ -142,7 +142,7 @@ Each chunk is converted into a numerical representation called an embedding — 
 
 The diagram below visualizes this concept — text goes in, numerical vectors come out, and similar meanings produce nearby vectors:
 
-<img src="images/embedding-model-concept.png" alt="Embedding Model Concept" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/embedding-model-concept.png?v=d93b183d06748f5e" alt="Embedding Model Concept" width="800"/>
 
 *This diagram shows how an embedding model converts text into numerical vectors, placing similar meanings — like "car" and "automobile" — near each other in vector space.*
 
@@ -160,13 +160,13 @@ The **ingestion flow** (runs once at upload time) splits the document and stores
 
 Once embeddings are stored, similar content naturally clusters together in vector space. The visualization below shows how documents about related topics end up as nearby points, which is what makes semantic search possible:
 
-<img src="images/vector-embeddings.png" alt="Vector Embeddings Space" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/vector-embeddings.png?v=18c534e834fd6f80" alt="Vector Embeddings Space" width="800"/>
 
 *This visualization shows how related documents cluster together in 3D vector space, with topics like Technical Docs, Business Rules, and FAQs forming distinct groups.*
 
 When a user searches, Spring AI's embedding search follows four steps. The diagram below walks through each one:
 
-<img src="images/embedding-search-steps.png" alt="How Spring AI Embedding Search Works" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/embedding-search-steps.png?v=7c0953b945d3682c" alt="How Spring AI Embedding Search Works" width="800"/>
 
 *This diagram shows how Spring AI embedding search works in four steps: (A) document chunks are embedded once via `EmbeddingModel` and stored in a `VectorStore` (SimpleVectorStore), (B) each user query is embedded into a Query Vector, (C) cosine similarity compares the query vector against all stored vectors to produce relevance scores, and (D) the top-K matching chunks are returned as a `List<Document>` and fed into `ChatClient` for the final RAG answer.*
 
@@ -193,13 +193,13 @@ for (Document doc : matches) {
 
 The diagram below contrasts semantic search with traditional keyword search. A keyword search for "vehicle" misses a chunk about "cars and trucks," but semantic search understands they mean the same thing and returns it as a high-scoring match:
 
-<img src="images/semantic-search.png" alt="Semantic Search" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/semantic-search.png?v=02e974e342aadd62" alt="Semantic Search" width="800"/>
 
 *This diagram compares keyword-based search with semantic search, showing how semantic search retrieves conceptually related content even when exact keywords differ.*
 
 Under the hood, similarity is measured using cosine similarity — essentially asking "are these two arrows pointing in the same direction?" Two chunks can use completely different words, but if they mean the same thing their vectors point the same way and score close to 1.0:
 
-<img src="images/cosine-similarity.png" alt="Cosine Similarity" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/cosine-similarity.png?v=2a6466e686488025" alt="Cosine Similarity" width="800"/>
 
 *This diagram illustrates cosine similarity as the angle between embedding vectors — more aligned vectors score closer to 1.0, indicating higher semantic similarity.*
 
@@ -236,7 +236,7 @@ String answer = chatModel.call(new Prompt(promptText))
 
 The diagram below shows this assembly in action — the top-scoring chunks from the search step are injected into the prompt template, and the `OpenAiChatModel` generates a grounded answer:
 
-<img src="images/context-assembly.png" alt="Context Assembly" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/context-assembly.png?v=04985dd02cd1be47" alt="Context Assembly" width="800"/>
 
 *This diagram shows how the top-scoring chunks are assembled into a structured prompt, allowing the model to generate a grounded answer from your data.*
 
@@ -309,7 +309,7 @@ From the Spring Boot Dashboard, you can:
 
 Simply click the play button next to "spring-ai-rag" to start this module, or start all modules at once.
 
-<img src="images/dashboard.png" alt="Spring Boot Dashboard" width="300"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/dashboard.png?v=0e03884cfc5fceda" alt="Spring Boot Dashboard" width="300"/>
 
 **Option 2: Using shell scripts**
 
@@ -379,7 +379,7 @@ cd ..; .\stop-all.ps1  # All modules
 
 The application provides a web interface for document upload and questioning.
 
-<a href="images/rag-homepage.png"><img src="images/rag-homepage.png" alt="RAG Application Interface" width="800" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/></a>
+<a href="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/rag-homepage.png?v=de8b516fdd4d7340"><img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/rag-homepage.png?v=de8b516fdd4d7340" alt="RAG Application Interface" width="800" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/></a>
 
 *This screenshot shows the RAG application interface where you upload documents and ask questions.*
 
@@ -398,7 +398,7 @@ The system searches for relevant chunks, includes them in the prompt, and genera
 
 Notice each answer includes source references with similarity scores. These scores (0 to 1) show how relevant each chunk was to your question. Higher scores mean better matches. This lets you verify the answer against the source material.
 
-<a href="images/rag-query-results.png"><img src="images/rag-query-results.png" alt="RAG Query Results" width="800" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/></a>
+<a href="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/rag-query-results.png?v=194a8d33cd9cfd52"><img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/rag-query-results.png?v=194a8d33cd9cfd52" alt="RAG Query Results" width="800" style="border: 1px solid #ddd; box-shadow: 0 2px 8px rgba(0,0,0,0.1);"/></a>
 
 *This screenshot shows query results with the generated answer, source references, and relevance scores for each retrieved chunk.*
 
@@ -487,7 +487,7 @@ against 150-token chunks because the relevant sentences are no longer diluted.
 
 Every retrieved chunk comes with a similarity score between 0 and 1 that indicates how closely it matches the user's question. The diagram below visualizes the score ranges and how the system uses them to filter results:
 
-<img src="images/similarity-scores.png" alt="Similarity Scores" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/similarity-scores.png?v=c48a60956c439c50" alt="Similarity Scores" width="800"/>
 
 *This diagram shows score ranges from 0 to 1, illustrating how similarity thresholds filter out irrelevant chunks.*
 
@@ -505,7 +505,7 @@ raise it if unrelated chunks appear in source references.
 
 Embeddings work well when meaning clusters cleanly, but they have blind spots. The diagram below shows the common failure modes — chunks that are too large produce muddy vectors, chunks that are too small lack context, ambiguous terms point to multiple clusters, and exact-match lookups (IDs, part numbers) don't work with embeddings at all:
 
-<img src="images/embedding-failure-modes.png" alt="Embedding Failure Modes" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/embedding-failure-modes.png?v=918870e02e328ec6" alt="Embedding Failure Modes" width="800"/>
 
 *This diagram shows common embedding failure modes: chunks too large, chunks too small, ambiguous terms that point to multiple clusters, and exact-match lookups like IDs.*
 
@@ -521,7 +521,7 @@ Each model has a maximum context window. You can't include every chunk from a la
 
 RAG isn't always the right approach. The decision guide below helps you determine when RAG adds value versus when simpler approaches — like including content directly in the prompt or relying on the model's built-in knowledge — are sufficient:
 
-<img src="images/when-to-use-rag.png" alt="When to Use RAG" width="800"/>
+<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/03-rag/images/when-to-use-rag.png?v=07ef93bd37a042d5" alt="When to Use RAG" width="800"/>
 
 *This diagram shows a decision guide for when RAG adds value versus when simpler approaches are sufficient.*
 
