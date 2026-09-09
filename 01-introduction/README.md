@@ -49,7 +49,7 @@ This is fine for simple Q&A but useless for real applications. Customer service 
 
 The following diagram contrasts the two approaches — on the left, a stateless call that forgets your name; on the right, a stateful call backed by conversation memory that remembers it.
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/01-introduction/images/stateless-vs-stateful.png?v=f3b1967598672f7f" alt="Stateless vs Stateful Conversations" width="800"/>
+<img src="images/stateless-vs-stateful.png" alt="Stateless vs Stateful Conversations" width="800"/>
 
 *The difference between stateless (independent calls) and stateful (context-aware) conversations*
 
@@ -57,7 +57,7 @@ The following diagram contrasts the two approaches — on the left, a stateless 
 
 Before diving into conversations, it's important to understand tokens - the basic units of text that language models process:
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/01-introduction/images/token-explanation.png?v=cfd7bb5ee2cb6989" alt="Token Explanation" width="800"/>
+<img src="images/token-explanation.png" alt="Token Explanation" width="800"/>
 
 *Example of how text is broken into tokens - "I love AI!" becomes 4 separate processing units*
 
@@ -69,7 +69,7 @@ Chat memory solves the stateless problem by maintaining conversation history. Be
 
 Spring AI provides conversation management through its `ChatMemory` abstraction. `MessageWindowChatMemory` maintains a sliding window of recent messages per conversation, automatically dropping old ones when the window is full. The diagram below shows how a sliding window of messages maintains recent conversation context.
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/01-introduction/images/memory-window.png?v=1d7619e419e0b8b7" alt="Memory Window Concept" width="800"/>
+<img src="images/memory-window.png" alt="Memory Window Concept" width="800"/>
 
 *A sliding message window maintains recent messages, automatically dropping old ones*
 
@@ -234,7 +234,7 @@ From the Spring Boot Dashboard, you can:
 
 Simply click the play button next to "spring-ai-introduction" to start this module, or start all modules at once.
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/01-introduction/images/dashboard.png?v=0e03884cfc5fceda" alt="Spring Boot Dashboard" width="300"/>
+<img src="images/dashboard.png" alt="Spring Boot Dashboard" width="300"/>
 
 **Option 2: Using shell scripts**
 
@@ -304,7 +304,7 @@ cd ..; .\stop-all.ps1  # All modules
 
 The application provides a web interface with two chat implementations side-by-side.
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/01-introduction/images/home-screen.png?v=444bb890996cd6bf" alt="Application Home Screen" width="800"/>
+<img src="images/home-screen.png" alt="Application Home Screen" width="800"/>
 
 *Dashboard showing both Simple Chat (stateless) and Conversational Chat (stateful) options*
 
@@ -312,7 +312,7 @@ The application provides a web interface with two chat implementations side-by-s
 
 Try this first. Ask "My name is John" and then immediately ask "What's my name?" The model won't remember because each message is independent. This demonstrates the core problem with basic language model integration - no conversation context.
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/01-introduction/images/simple-chat-stateless-demo.png?v=0b2e556123b76dfc" alt="Stateless Chat Demo" width="800"/>
+<img src="images/simple-chat-stateless-demo.png" alt="Stateless Chat Demo" width="800"/>
 
 *AI doesn't remember your name from the previous message*
 
@@ -320,7 +320,7 @@ Try this first. Ask "My name is John" and then immediately ask "What's my name?"
 
 Now try the same sequence here. Ask "My name is John" and then "What's my name?" This time it remembers. The difference is the sliding message window - it maintains conversation history and includes it with each request. This is how production conversational AI works.
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/01-introduction/images/conversational-chat-stateful-demo.png?v=b5575b281180d5ec" alt="Stateful Chat Demo" width="800"/>
+<img src="images/conversational-chat-stateful-demo.png" alt="Stateful Chat Demo" width="800"/>
 
 *AI remembers your name from earlier in the conversation*
 

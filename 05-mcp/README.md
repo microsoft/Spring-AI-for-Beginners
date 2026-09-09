@@ -24,7 +24,7 @@ In the previous modules, you learned about chat, prompt engineering, RAG, and to
 
 That's what the **Model Context Protocol (MCP)** provides. MCP is an open protocol for connecting AI applications to external tool providers — a standard way for AI clients to discover and invoke tools hosted on remote servers.
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/05-mcp/images/mcp-architecture.png?v=9c54fa7c7e150577" alt="MCP Architecture Overview" width="800"/>
+<img src="images/mcp-architecture.png" alt="MCP Architecture Overview" width="800"/>
 
 *MCP provides a universal protocol for AI applications to discover and invoke tools on remote servers — decoupling AI logic from tool implementations.*
 
@@ -57,7 +57,7 @@ MCP gives you:
 
 A growing ecosystem of MCP servers also ships pre-built integrations for databases, APIs, and cloud services, so your AI app can connect to *anyone's* MCP server using the same protocol.
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/05-mcp/images/custom-vs-mcp-tools.png?v=d5044d2c06c1526a" alt="Custom Tools vs MCP Tools" width="800"/>
+<img src="images/custom-vs-mcp-tools.png" alt="Custom Tools vs MCP Tools" width="800"/>
 
 *Custom `@Tool` methods run in-process; `@McpTool` methods run on a separate server and are discovered over the network.*
 
@@ -65,7 +65,7 @@ A growing ecosystem of MCP servers also ships pre-built integrations for databas
 
 MCP follows a client–server model. The **MCP client** (your AI application) connects to one or more **MCP servers**, asks each for its tool catalog at startup, and then invokes those tools by name over the transport. Spring AI's `ToolCallbackProvider` handles the connect, discover, and invoke steps automatically — you receive ready-to-use `ToolCallback` objects.
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/05-mcp/images/mcp-protocol-detail.png?v=52b8dc8e4159c7f7" alt="MCP Protocol Detail" width="800"/>
+<img src="images/mcp-protocol-detail.png" alt="MCP Protocol Detail" width="800"/>
 
 *Clients send JSON-RPC requests; servers return structured results. Tool schemas are exchanged during the discovery phase.*
 
@@ -152,7 +152,7 @@ The only difference between the two paths is **who's making the decision** — y
 
 ### Game Flow
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/05-mcp/images/client-server-sequence.png?v=b7c864aeff830fd7" alt="MCP Tic-Tac-Toe client-server sequence diagram showing both the direct board path and the agent chat path" width="800"/>
+<img src="images/client-server-sequence.png" alt="MCP Tic-Tac-Toe client-server sequence diagram showing both the direct board path and the agent chat path" width="800"/>
 
 Clicking the board calls `makeMove` then `aiMove` directly. Typing in the chat panel sends the message plus the visual board's `gameId` to the LLM, which picks the same MCP tools through the agent path. Either way, both paths drive the same MCP server, so the visual board and the chat always agree on the game state. (PlantUML source: [`images/client-server-sequence.puml`](images/client-server-sequence.puml).)
 
@@ -174,7 +174,7 @@ Get-Content ..\.env
 
 The dev container ships the Spring Boot Dashboard extension. Open it from the Activity Bar, start `mcp-server` (wait until it's listening on 8085), then start `mcp-client`.
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/05-mcp/images/dashboard.png?v=0e03884cfc5fceda" alt="Spring Boot Dashboard" width="300"/>
+<img src="images/dashboard.png" alt="Spring Boot Dashboard" width="300"/>
 
 **Option 2: Start scripts**
 
@@ -204,7 +204,7 @@ Open **http://localhost:8082** in your browser.
 
 ## Using the Application
 
-<img src="https://raw.githubusercontent.com/microsoft/Spring-AI-for-Beginners/main/05-mcp/images/game-and-architecture.png?v=5a8493710760b8e8" alt="Tic-Tac-Toe Game UI" width="800"/>
+<img src="images/game-and-architecture.png" alt="Tic-Tac-Toe Game UI" width="800"/>
 
 You play as **X** against an AI playing **O**. Every action — yours and the AI's — flows through MCP tools on the server.
 
