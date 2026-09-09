@@ -1,5 +1,7 @@
 # Module 02: Prompt Engineering with gpt-5.6-luna
 
+[Presentation slides (PowerPoint)](../presentations/02-prompt-engineering-with-spring-ai.pptx)
+
 ## Table of Contents
 
 - [What You'll Learn](#what-youll-learn)

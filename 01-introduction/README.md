@@ -1,5 +1,7 @@
 # Module 01: Getting Started with Spring AI
 
+[Presentation slides (PowerPoint)](../presentations/01-getting-started-with-spring-ai.pptx)
+
 ## Table of Contents
 
 - [What You'll Learn](#what-youll-learn)

@@ -1,5 +1,7 @@
 # Module 03: RAG (Retrieval-Augmented Generation)
 
+[Presentation slides (PowerPoint)](../presentations/03-rag-with-spring-ai.pptx)
+
 ## Table of Contents
 
 - [What You'll Learn](#what-youll-learn)

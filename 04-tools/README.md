@@ -1,5 +1,7 @@
 # Module 04: AI Agents with Tools
 
+[Presentation slides (PowerPoint)](../presentations/04-tool-calling-with-spring-ai.pptx)
+
 ## Table of Contents
 
 - [What You'll Learn](#what-youll-learn)
