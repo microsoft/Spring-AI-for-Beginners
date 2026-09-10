@@ -1,7 +1,5 @@
 # Module 05: Model Context Protocol (MCP)
 
-[Presentation slides (PowerPoint)](../presentations/05-mcp-with-spring-ai.pptx)
-
 ## Table of Contents
 
 - [What You'll Learn](#what-youll-learn)
@@ -17,6 +15,8 @@
 - [MCP vs Tools (Module 04)](#mcp-vs-tools-module-04)
 - [Summary](#summary)
 - [Next Steps](#next-steps)
+
+> **Presentation materials:** You can use the [included PowerPoint presentation](../presentations/05-mcp-with-spring-ai.pptx) to present this module's content to others.
 
 ## What You'll Learn
 

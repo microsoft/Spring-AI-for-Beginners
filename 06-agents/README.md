@@ -1,7 +1,5 @@
 # Module 06: Agentic Patterns
 
-[Presentation slides (PowerPoint)](../presentations/06-agentic-patterns-with-spring-ai.pptx)
-
 This module demonstrates five fundamental **agentic workflow patterns** for building effective LLM-based systems using Spring AI. Each pattern is implemented as an interactive demo you can run and explore in a web UI.
 
 ## Table of Contents
@@ -20,6 +18,8 @@ This module demonstrates five fundamental **agentic workflow patterns** for buil
   - [5. Evaluator-Optimizer](#5-evaluator-optimizer)
 - [Best Practices](#best-practices)
 - [Next Steps](#next-steps)
+
+> **Presentation materials:** You can use the [included PowerPoint presentation](../presentations/06-agentic-patterns-with-spring-ai.pptx) to present this module's content to others.
 
 ## What You'll Learn
 

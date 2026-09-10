@@ -1,7 +1,5 @@
 # Module 04: AI Agents with Tools
 
-[Presentation slides (PowerPoint)](../presentations/04-tool-calling-with-spring-ai.pptx)
-
 ## Table of Contents
 
 - [What You'll Learn](#what-youll-learn)
@@ -31,6 +29,8 @@
 - [Tools vs RAG](#tools-vs-rag)
 - [Summary](#summary)
 - [Next Steps](#next-steps)
+
+> **Presentation materials:** You can use the [included PowerPoint presentation](../presentations/04-tool-calling-with-spring-ai.pptx) to present this module's content to others.
 
 ## What You'll Learn
 

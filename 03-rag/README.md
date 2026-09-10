@@ -1,7 +1,5 @@
 # Module 03: RAG (Retrieval-Augmented Generation)
 
-[Presentation slides (PowerPoint)](../presentations/03-rag-with-spring-ai.pptx)
-
 ## Table of Contents
 
 - [What You'll Learn](#what-youll-learn)
@@ -29,6 +27,8 @@
 - [When RAG Matters](#when-rag-matters)
 - [Summary](#summary)
 - [Next Steps](#next-steps)
+
+> **Presentation materials:** You can use the [included PowerPoint presentation](../presentations/03-rag-with-spring-ai.pptx) to present this module's content to others.
 
 ## What You'll Learn
 
