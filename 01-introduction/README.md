@@ -114,6 +114,8 @@ Credentials come from environment variables set by `azd up`. Microsoft Foundry m
 
 **Conversation Memory** - Spring AI's `MessageChatMemoryAdvisor` adds chat memory transparently to a `ChatClient`. It loads prior turns from a `ChatMemory` (here a `MessageWindowChatMemory` backed by an `InMemoryChatMemoryRepository`) before every call and writes the new exchange back afterward — you never touch the message list yourself ([ConversationService.java](src/main/java/com/example/springai/service/ConversationService.java)):
 
+> **Persistent storage:** This lesson uses `InMemoryChatMemoryRepository`. For database-backed conversation history, see the [Azure Cosmos DB chat memory guide](https://azurecosmosdb.github.io/spring-ai/docs/chat-memory.html) for the external integration's dependencies and configuration. The lesson's code remains in-memory.
+
 ```java
 // In SpringAiConfig.java — wire the memory once:
 @Bean
